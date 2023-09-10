@@ -1,29 +1,18 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   my_malloc.h                                        :+:      :+:    :+:   */
+/*   builtins4.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: smallem <smallem@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/08/25 21:16:40 by smallem           #+#    #+#             */
-/*   Updated: 2023/09/10 14:10:15 by smallem          ###   ########.fr       */
+/*   Created: 2023/09/10 12:24:36 by smallem           #+#    #+#             */
+/*   Updated: 2023/09/10 13:28:36 by smallem          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef MY_MALLOC_H
-# define MY_MALLOC_H
+#include "../include/minishell.h"
 
-#include <stdlib.h>
-
-typedef struct s_mem t_mem;
-
-typedef struct	s_mem
+void	ft_echo(t_term *term)
 {
-	void	*ptr;
-	size_t	size;
-	t_mem	*next;
-}	t_mem;
-void	free_lst(t_mem **lst);
-void	*my_malloc(t_mem **lst, size_t size);
-
-#endif
+		
+}

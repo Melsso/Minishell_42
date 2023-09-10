@@ -6,13 +6,13 @@
 /*   By: smallem <smallem@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/25 21:17:35 by smallem           #+#    #+#             */
-/*   Updated: 2023/09/02 18:14:19 by smallem          ###   ########.fr       */
+/*   Updated: 2023/09/10 14:10:05 by smallem          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/my_malloc.h"
 
-t_mem	*create_node(void *ptr, size_t size)
+static t_mem	*create_node(void *ptr, size_t size)
 {
 	t_mem	*tmp;
 
@@ -25,7 +25,7 @@ t_mem	*create_node(void *ptr, size_t size)
 	return (tmp);
 }
 
-void	add2lst(t_mem **lst, t_mem *node)
+static void	add2lst(t_mem **lst, t_mem *node)
 {
 	t_mem	*tmp;
 

@@ -6,7 +6,7 @@
 /*   By: smallem <smallem@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/19 18:03:00 by smallem           #+#    #+#             */
-/*   Updated: 2023/09/05 14:24:15 by smallem          ###   ########.fr       */
+/*   Updated: 2023/09/10 14:16:22 by smallem          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@ static void	main_loop(t_term *term, char **env)
 {
 	char	*input;
 
-	term->env = copy_env(env);
+	term->env = copy_env(env, term);
 	printf(GREEN);
 	while (1)
 	{

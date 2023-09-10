@@ -6,7 +6,7 @@
 /*   By: smallem <smallem@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/07 16:42:21 by smallem           #+#    #+#             */
-/*   Updated: 2023/09/07 17:56:17 by smallem          ###   ########.fr       */
+/*   Updated: 2023/09/10 14:16:56 by smallem          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,7 @@ static size_t mat_size(char *input, char sep)
 	return (len);
 }
 
-char	**splt(char *input)
+char	**splt(char *input, t_term *term)
 {
 	size_t	len;
 	char	**mat;
@@ -51,7 +51,7 @@ char	**splt(char *input)
 	int	flag = 0;
 
 	len = mat_size(input, '|');
-	mat = (char **)malloc(sizeof(char *) * (len + 1));
+	mat = (char **)my_malloc(&term->mem_lst, sizeof(char *) * (len + 1));
 	if (!mat)
 	{
 		//malloc error
@@ -73,13 +73,13 @@ char	**splt(char *input)
 		}
 		if (input[i] == '|' && !flag)
 		{
-			mat[j] = ft_substr(tmp, 0, input + i - tmp);
+			mat[j] = ft_substr(tmp, 0, input + i - tmp, term);
 			tmp = input + i + 1;
 			j++;
 		}
 		i++;
 	}
-	mat[j++] = strdup(tmp);
+	mat[j++] = ft_strdup(tmp, term);
 	mat[j] = NULL;
 	return (mat);
 }

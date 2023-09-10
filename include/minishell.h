@@ -6,7 +6,7 @@
 /*   By: smallem <smallem@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/19 18:05:52 by smallem           #+#    #+#             */
-/*   Updated: 2023/09/07 17:55:37 by smallem          ###   ########.fr       */
+/*   Updated: 2023/09/10 14:16:41 by smallem          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,6 @@
 # define MINISHELL_H
 
 #include "../libs/libft/libft.h"
-#include "my_malloc.h"
 #include <stdio.h>
 #include <fcntl.h>
 #include <stdlib.h>
@@ -41,13 +40,6 @@ enum e_op
 	TK_TAB		= '\t',
 	TK_EQ		= '=',
 };
-enum e_token
-{
-	TK_CMD,
-	TK_PL,
-	TK_RED,
-	TK_ARGS,
-};
 
 typedef struct s_cmd t_cmd;
 typedef struct s_cmd
@@ -59,31 +51,22 @@ typedef struct s_cmd
 	char	*path;
 }	t_cmd;
 
-typedef struct s_tree t_tree;
-typedef struct s_tree
-{
-	enum e_token	type;
-	void			*content;
-	t_tree			*r;
-	t_tree			*l;
-}	t_tree;
-
-typedef struct s_term
-{
-	int		nb_pipes;
-	t_tree	*ast;
-	char	**env;
-	pid_t	*pids;
-	t_mem	*mem_lst;
-}	t_term;
-typedef struct s_term t_term;
+// typedef struct s_term
+// {
+// 	int		nb_pipes;
+// 	t_tree	*ast;
+// 	char	**env;
+// 	pid_t	*pids;
+// 	t_mem	*mem_lst;
+// }	t_term;
+// typedef struct s_term t_term;
 
 int	ex_stat;
 
 
 void 	print_tree(t_tree* root);
 void	init_s(t_term *term, char *input);
-char	**copy_env(char **env);
-char	**splt(char *input);
+char	**copy_env(char **env, t_term *term);
+char	**splt(char *input, t_term *term);
 
 #endif

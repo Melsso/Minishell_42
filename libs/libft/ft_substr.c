@@ -6,13 +6,13 @@
 /*   By: smallem <smallem@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/21 13:40:42 by smallem           #+#    #+#             */
-/*   Updated: 2023/04/02 17:12:42 by smallem          ###   ########.fr       */
+/*   Updated: 2023/09/10 13:55:50 by smallem          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-char	*ft_substr(char const *s, unsigned int start, size_t len)
+char	*ft_substr(char const *s, unsigned int start, size_t len, t_term *term)
 {
 	char	*tmp;
 
@@ -28,7 +28,7 @@ char	*ft_substr(char const *s, unsigned int start, size_t len)
 	}
 	if (ft_strlen(s + start) < len)
 		len = ft_strlen(s + start);
-	tmp = (char *)malloc(len + 1);
+	tmp = my_malloc(&term->mem_lst, len + 1);
 	if (tmp == NULL)
 		return (NULL);
 	ft_strlcpy(tmp, s + start, len + 1);

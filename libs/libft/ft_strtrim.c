@@ -6,7 +6,7 @@
 /*   By: smallem <smallem@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/21 13:57:24 by smallem           #+#    #+#             */
-/*   Updated: 2023/03/22 19:49:08 by smallem          ###   ########.fr       */
+/*   Updated: 2023/09/10 13:56:04 by smallem          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ int	is_inset(char const s1, char const *set)
 	return (0);
 }
 
-char	*ft_strtrim(char const *s1, char const *set)
+char	*ft_strtrim(char const *s1, char const *set, t_term *term)
 {
 	char	*tmp;
 	size_t	i;
@@ -39,7 +39,7 @@ char	*ft_strtrim(char const *s1, char const *set)
 	j = ft_strlen(s1);
 	while (j > i && is_inset(s1[j - 1], set))
 		j--;
-	tmp = (char *)malloc(j - i + 1);
+	tmp = my_malloc(&term->mem_lst, j - i + 1);
 	if (tmp == NULL)
 		return (NULL);
 	k = 0;

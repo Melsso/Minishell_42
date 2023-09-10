@@ -6,7 +6,7 @@
 /*   By: smallem <smallem@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/21 13:36:35 by smallem           #+#    #+#             */
-/*   Updated: 2023/04/11 19:10:45 by smallem          ###   ########.fr       */
+/*   Updated: 2023/09/10 13:56:13 by smallem          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,7 @@ char	**f_all(char **set)
 	return (NULL);
 }
 
-char	**create_set(char **set, char const *s, char c)
+char	**create_set(char **set, char const *s, char c, t_term *term)
 {
 	char	*str;
 	int		i;
@@ -61,7 +61,7 @@ char	**create_set(char **set, char const *s, char c)
 			str++;
 		if (*str == c || str > s)
 		{
-			set[i] = ft_substr(s, 0, str - s);
+			set[i] = ft_substr(s, 0, str - s, term);
 			if (set[i] == NULL)
 				return (f_all(set));
 			s = str;
@@ -72,13 +72,13 @@ char	**create_set(char **set, char const *s, char c)
 	return (set);
 }
 
-char	**ft_split(char const *s, char c)
+char	**ft_split(char const *s, char c, t_term *term)
 {
 	char	**set;
 
-	set = (char **)malloc(sizeof(char *) * (count_words(s, c) + 1));
+	set = my_malloc(&term->mem_lst, sizeof(char *) * (count_words(s, c) + 1));
 	if (set == NULL)
 		return (NULL);
-	set = create_set(set, s, c);
+	set = create_set(set, s, c, term);
 	return (set);
 }

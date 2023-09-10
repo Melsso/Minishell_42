@@ -6,7 +6,7 @@
 /*   By: smallem <smallem@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/05 14:21:51 by smallem           #+#    #+#             */
-/*   Updated: 2023/09/07 16:41:56 by smallem          ###   ########.fr       */
+/*   Updated: 2023/09/10 14:14:05 by smallem          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,6 @@ void print_tree(t_tree* root) {
     }
 }
 
-char    *check_str(char *input)
-{       
-}
+// char    *check_str(char *input)
+// {       
+// }

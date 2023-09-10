@@ -6,7 +6,7 @@
 /*   By: smallem <smallem@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/21 12:10:31 by smallem           #+#    #+#             */
-/*   Updated: 2023/03/24 21:10:01 by smallem          ###   ########.fr       */
+/*   Updated: 2023/09/10 13:56:33 by smallem          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,7 @@ int	ft_pow(int i)
 	return (10 * ft_pow(i - 1));
 }
 
-char	*ft_itoa(int n)
+char	*ft_itoa(int n, t_term *term)
 {
 	int				size;
 	char			*tmp;
@@ -50,7 +50,7 @@ char	*ft_itoa(int n)
 	unsigned int	nb;
 
 	size = count_size(n);
-	tmp = (char *)malloc(size + 1);
+	tmp = my_malloc(&term->mem_lst, size + 1);
 	if (tmp == NULL)
 		return (NULL);
 	i = 0;
