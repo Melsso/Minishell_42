@@ -6,7 +6,7 @@
 /*   By: smallem <smallem@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/23 18:54:27 by smallem           #+#    #+#             */
-/*   Updated: 2023/09/25 13:12:55 by smallem          ###   ########.fr       */
+/*   Updated: 2023/09/25 18:35:05 by smallem          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,14 +24,16 @@ int	check_syntax(char *input)
 {
 	int		i;
 	char	c;
-
-	if (check_charset(input[0]))
+	
+	i = 0;
+	while (input[i] && (input[i] == TK_SPACE || input[i] == TK_TAB))
+		i++;
+	if (check_charset(input[i]))
 	{
 		printf("syntax error near unexpected token '%c'\n", input[0]);
 		return (0);
 	}
-	i = -1;
-	while (input[++i])
+	while (input[i])
 	{
 		if (input[i] == TK_SQUOTE || input[i] == TK_DQUOTE)
 		{
@@ -39,46 +41,41 @@ int	check_syntax(char *input)
 			while (input[i] && input[i] != c)
 				i++;
 			if (input[i] == c)
+			{
+				i++;
 				continue;
+			}	
 		}
-		else if ((input[i] == TK_GREATER || input[i] == TK_LESS) && !input[i + 1])
+		else if ((input[i] == TK_GREATER || input[i] == TK_LESS))
 		{
-			printf("syntax error near unexpected token 'newline'\n");
-			return (0);
-		}	
+			i++;
+			while (input[i] && (input[i] == TK_SPACE || input[i] == TK_TAB))
+				i++;
+			if (!input[i])
+			{
+				printf("syntax error near unexpected token 'newline'\n");
+				return (0);	
+			}
+		}
+		else if (input[i] == TK_PIPE && input[i + 1] == TK_PIPE)
+		{
+			printf("syntax error near unexpected token '|'\n");
+			return (0);	
+		}
+		i++;
 	}
 	return (1);
 }
 
-int	last_pipe(t_term *term)
+int	check_afterpipe(t_term *term, int i, int flag)
 {
-	int	i;
-
-	i = -1;
-	while (term->input[++i])
-	{
-		if (term->input[i] == TK_PIPE)
-		{
-			i++;
-			if (!term->input[i])
-				return (1);
-			while (term->input[i] && (term->input[i] == TK_SPACE
-				|| term->input[i] == TK_TAB || term->input[i] == TK_NL))
-				i++;
-			if (!term->input[i])
-				return (1);
-		}
-	}
-	return (0);
-}
-
-int	check_buff(t_term *term)
-{
-	int	i;
 	char	c;
 
-	i = -1;
-	while (term->input[++i])
+	while (term->input[i] && (term->input[i] == TK_SPACE || term->input[i] == TK_TAB || term->input[i] == TK_NL))
+		i++;
+	if (!term->input[i])
+		return (flag);
+	while (term->input[i])
 	{
 		if (term->input[i] == TK_SQUOTE || term->input[i] == TK_DQUOTE)
 		{
@@ -86,44 +83,73 @@ int	check_buff(t_term *term)
 			while (term->input[i] && term->input[i] != c)
 				i++;
 			if (term->input[i] == c)
+			{
+				i++;
 				continue ;
+			}
 			else
 			{
 				if (c == TK_SQUOTE)
-					return (1);
-				else if (c == TK_DQUOTE)
-					return (2);
+					return (flag + 1);
+				else
+					return (flag + 2);
 			}
 		}
-		if (term->input[i] == TK_PIPE && !term->input[i + 1])
-			return (3);
-		else if (term->input[i] == TK_PIPE && term->input[i + 1] == TK_SQUOTE && !term->input[i + 2])
-			return (4);
-		else if (term->input[i] == TK_PIPE && term->input[i + 1] == TK_DQUOTE && !term->input[i + 2])
-			return (5);
+		i++;
 	}
 	return (0);
 }
 
-static char	*update_rl(int flag, t_term *term, char *t)
+int	check_buff(t_term *term)
+{
+	int	i;
+	int	flag;
+	char	c;
+
+	i = 0;
+	while (term->input[i])
+	{
+		if (term->input[i] == TK_PIPE)
+		{
+			i++;
+			if (term->input[i] == TK_PIPE)
+				return (-1);
+			flag = check_afterpipe(term, i, 3);
+			if (flag)
+				return (flag);
+		}
+		if (term->input[i] == TK_SQUOTE || term->input[i] == TK_DQUOTE)
+		{
+			c = term->input[i++];
+			while (term->input[i] && term->input[i] != c)
+				i++;
+			if (term->input[i] == c)
+			{
+				i++;
+				continue ;
+			}
+			else
+			{
+				if (c == TK_SQUOTE)
+					return (1);
+				else
+					return (2);
+			}
+		}
+		i++;
+	}
+	return (0);
+}
+
+static char	*update_rl(int flag, t_term *term)
 {
 	char	*tmp;
 
 	tmp = NULL;
 	if (flag == 1)
-	{
-		if (t && !ft_strncmp(t, "pipe quote>", ft_strlen(t)))
-			tmp = ft_strdup("pipe quote>", term);
-		else
-			tmp = ft_strdup("quote>", term);
-	}
+		tmp = ft_strdup("quote>", term);
 	else if (flag == 2)
-	{
-		if (t && !ft_strncmp(t, "pipe dquote>", ft_strlen(t)))
-			tmp = ft_strdup("pipe dquote>", term);
-		else
-			tmp = ft_strdup("dquote>", term);
-	}
+		tmp = ft_strdup("dquote>", term);
 	else if (flag == 3)
 		tmp = ft_strdup("pipe>", term);
 	else if (flag == 4)
@@ -138,7 +164,7 @@ void	read_more(t_term *term, int flag)
 	char	*tmp;
 	char	*nl;
 
-	tmp = update_rl(flag, term, NULL);
+	tmp = update_rl(flag, term);
 	while (flag)
 	{
 		term->input = ft_strjoin(term->input, "\n", term);
@@ -147,15 +173,16 @@ void	read_more(t_term *term, int flag)
 		free(nl);
 		nl = NULL;
 		flag = check_buff(term);
-		tmp = update_rl(flag, term, tmp);
+		if (flag == -1)
+			break ;
+		tmp = update_rl(flag, term);
 	}
 }
 
-void	check_incomplete(char *input, t_term *term)
+void	check_incomplete(t_term *term)
 {
 	int	flag;
 
-	term->input = ft_strdup(input, term);
 	flag = check_buff(term);
 	if (flag > 0)
 		read_more(term, flag);
@@ -164,8 +191,11 @@ void	check_incomplete(char *input, t_term *term)
 
 int check_input(char *input, t_term *term)
 {
-	if (!check_syntax(input))
+	term->input = ft_strdup(input, term);
+	free(input);
+	input = NULL;
+	if (!check_syntax(term->input))
 		return (0);
-	check_incomplete(input, term);
+	check_incomplete(term);
 	return (check_syntax(term->input));
 }

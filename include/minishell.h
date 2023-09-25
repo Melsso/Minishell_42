@@ -6,7 +6,7 @@
 /*   By: smallem <smallem@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/19 18:05:52 by smallem           #+#    #+#             */
-/*   Updated: 2023/09/25 12:37:14 by smallem          ###   ########.fr       */
+/*   Updated: 2023/09/25 17:23:58 by smallem          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,7 +61,6 @@ char	**splt(char *input, t_term *term);
 int 	check_input(char *input, t_term *term);
 int		count_pipes(t_term *term);
 int		check_charset(char c);
-int		last_pipe(t_term *term);
 
 
 

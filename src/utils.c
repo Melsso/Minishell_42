@@ -6,7 +6,7 @@
 /*   By: smallem <smallem@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/25 20:56:41 by smallem           #+#    #+#             */
-/*   Updated: 2023/09/10 14:14:53 by smallem          ###   ########.fr       */
+/*   Updated: 2023/09/25 17:32:22 by smallem          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,18 +31,3 @@ char	**copy_env(char **env, t_term *term)
 	new_ev[len] = NULL;
 	return (new_ev);
 }
-
-// char	*get_cmd_path(char **env, char *cmd)
-// {
-// 	char	*tmp;
-// 	ssize_t	i;
-
-// 	i = -1;
-// 	while (env[++i])
-// 	{
-// 		if (!ft_strncmp(env[i], "PATH=", ft_strlen(env[i])))
-// 			break ;
-// 	}
-// 	if (!env[i])
-// 		return (NULL);
-// }
