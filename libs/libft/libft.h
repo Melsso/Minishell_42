@@ -6,7 +6,7 @@
 /*   By: smallem <smallem@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/20 16:53:13 by smallem           #+#    #+#             */
-/*   Updated: 2023/09/10 13:55:18 by smallem          ###   ########.fr       */
+/*   Updated: 2023/09/23 14:44:04 by smallem          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,6 +51,7 @@ typedef struct s_term	t_term;
 typedef struct s_term
 {
 	int		nb_pipes;
+	char	*input;
 	t_tree	*ast;
 	char	**env;
 	pid_t	*pids;

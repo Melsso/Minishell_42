@@ -6,7 +6,7 @@
 /*   By: smallem <smallem@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/22 11:58:18 by smallem           #+#    #+#             */
-/*   Updated: 2023/09/10 14:13:47 by smallem          ###   ########.fr       */
+/*   Updated: 2023/09/25 12:14:28 by smallem          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,10 +17,6 @@ static t_tree	*create_node(enum e_token type, void *content, t_term *term)
 	t_tree	*node;
 
 	node = (t_tree *)my_malloc(&term->mem_lst, sizeof(t_tree));
-	if (!node)
-	{
-		//handle malloc error
-	}
 	node->type = type;
 	node->content = content;
 	node->r = NULL;
@@ -62,27 +58,19 @@ static void	create_tree(ssize_t nb_pipes, t_tree **root, t_term *term)
 	}
 }
 
-static void	populate_tree(t_tree **root, char *input, t_term *term)
+static void	populate_tree(t_tree **root, t_term *term)
 {
 	t_tree	*tmp;
 	ssize_t	i;
 	char	**pipe_split;
 	char	**cmd;
 
-	pipe_split = ft_split(input , TK_PIPE, term);
-	if (!pipe_split)
-	{
-		//handle malloc error
-	}
+	pipe_split = splt(term->input, term);
 	i = -1;
 	tmp = *root;
 	while (pipe_split[++i])
 	{
 		cmd = ft_split(pipe_split[i], TK_SPACE, term);
-		if (!cmd)
-		{
-				//malloc error
-		}
 		if (tmp->type == TK_PL)
 		{
 			tmp->l->content = cmd[0];
@@ -106,14 +94,13 @@ void	init_s(t_term *term, char *input)
 	i = -1;
 	term->nb_pipes = 0;
 	term->ast = NULL;
+	term->input = NULL;
 	root = NULL;
-	while (input && input[++i])
-	{
-		if (input[i] == TK_PIPE)
-			term->nb_pipes++;
-	}
+	if (!check_input(input, term))
+		return ;
+	term->nb_pipes = count_pipes(term);
 	term->pids = (pid_t *)my_malloc(&term->mem_lst, sizeof(pid_t) * (term->nb_pipes + 1));
 	create_tree(term->nb_pipes, &root, term);
-	populate_tree(&root, input, term);
+	populate_tree(&root, term);
 	term->ast = root;
 }

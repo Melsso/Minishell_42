@@ -6,7 +6,7 @@
 /*   By: smallem <smallem@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/19 18:03:00 by smallem           #+#    #+#             */
-/*   Updated: 2023/09/10 14:16:22 by smallem          ###   ########.fr       */
+/*   Updated: 2023/09/23 18:59:59 by smallem          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,8 +24,8 @@ static void	main_loop(t_term *term, char **env)
 			input = readline("~~> ");
 		if (input && *input)
 		{
-			add_history(input);
 			init_s(term, input);
+			add_history(term->input);
 			print_tree(term->ast);
 		}
 		else if (!input)

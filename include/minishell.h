@@ -6,7 +6,7 @@
 /*   By: smallem <smallem@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/19 18:05:52 by smallem           #+#    #+#             */
-/*   Updated: 2023/09/10 14:16:41 by smallem          ###   ########.fr       */
+/*   Updated: 2023/09/25 12:37:14 by smallem          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,16 +51,6 @@ typedef struct s_cmd
 	char	*path;
 }	t_cmd;
 
-// typedef struct s_term
-// {
-// 	int		nb_pipes;
-// 	t_tree	*ast;
-// 	char	**env;
-// 	pid_t	*pids;
-// 	t_mem	*mem_lst;
-// }	t_term;
-// typedef struct s_term t_term;
-
 int	ex_stat;
 
 
@@ -68,5 +58,11 @@ void 	print_tree(t_tree* root);
 void	init_s(t_term *term, char *input);
 char	**copy_env(char **env, t_term *term);
 char	**splt(char *input, t_term *term);
+int 	check_input(char *input, t_term *term);
+int		count_pipes(t_term *term);
+int		check_charset(char c);
+int		last_pipe(t_term *term);
+
+
 
 #endif

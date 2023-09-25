@@ -8,6 +8,7 @@ SRC_DIR = src/
 SRC		:=	main.c \
 			parsing_utils.c \
 			parsing_utils2.c \
+			parsing_utils3.c \
 			my_malloc.c \
 			utils.c \
 			utils2.c \

@@ -6,7 +6,7 @@
 /*   By: smallem <smallem@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/07 16:42:21 by smallem           #+#    #+#             */
-/*   Updated: 2023/09/10 14:16:56 by smallem          ###   ########.fr       */
+/*   Updated: 2023/09/23 19:02:41 by smallem          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,15 +47,11 @@ char	**splt(char *input, t_term *term)
 	char	*tmp;
 	size_t	i;
 	size_t	j = 0;
+	int	flag;
 
-	int	flag = 0;
-
+	flag = 0;
 	len = mat_size(input, '|');
 	mat = (char **)my_malloc(&term->mem_lst, sizeof(char *) * (len + 1));
-	if (!mat)
-	{
-		//malloc error
-	}
 	i = 0;
 	tmp = input;
 	while (input[i])
