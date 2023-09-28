@@ -6,7 +6,7 @@
 /*   By: smallem <smallem@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/25 20:56:41 by smallem           #+#    #+#             */
-/*   Updated: 2023/09/25 19:00:03 by smallem          ###   ########.fr       */
+/*   Updated: 2023/09/28 15:27:24 by smallem          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,8 +56,47 @@ char	*get_path(t_term *term, char *cmd)
 	while (ppath[++i])
 	{
 		line = ft_strjoin(ft_strjoin(ppath[i], "/", term), cmd, term);
-		if (access(X_OK | F_OK, line) == 0)
+		if (access(line, X_OK | F_OK) == 0)
 			return (line);
+	}
+	return (NULL);
+}
+
+t_cmd	*build_cmd(t_term *term, t_tree **node)
+{
+	t_cmd	*cmd;
+	char	*tmp;
+	char	*cmd_name;
+	int		i;
+
+	cmd = (t_cmd *)my_malloc(&term->mem_lst, sizeof(t_cmd));
+	cmd->fd_in = 0;
+	cmd->fd_out = 1;
+	if ((*node)->content)
+	{
+		tmp = (char *)(*node)->content;
+		cmd->args = ft_split(tmp, ' ', term);
+		i = -1;
+		while (cmd->args[++i])
+		{
+			if (!ft_strncmp(cmd->args[i], ">", ft_strlen(cmd->args[i])))
+				cmd->fd_out = open(cmd->args[i + 1], O_CREAT | O_APPEND | O_WRONLY);
+			else if (!ft_strncmp(cmd->args[i], "<", ft_strlen(cmd->args[i])))
+				cmd->fd_in = open(cmd->args[i + 1], O_RDONLY);
+		}
+		if (cmd->fd_in < 0 || cmd->fd_out < 0)
+		{
+			// open error
+			printf("Bad file\n");
+		}
+		if (!ft_strncmp(cmd->args[0], ">", ft_strlen(cmd->args[0]))
+			|| !ft_strncmp(cmd->args[0], "<", ft_strlen(cmd->args[0])))
+			i = 2;
+		else
+			i = 0;
+		cmd_name = ft_strdup(cmd->args[i], term);
+		cmd->path = get_path(term, cmd_name);
+		return (cmd);
 	}
 	return (NULL);
 }

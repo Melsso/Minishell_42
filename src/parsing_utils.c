@@ -6,7 +6,7 @@
 /*   By: smallem <smallem@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/22 11:58:18 by smallem           #+#    #+#             */
-/*   Updated: 2023/09/25 17:53:17 by smallem          ###   ########.fr       */
+/*   Updated: 2023/09/28 15:23:16 by smallem          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,6 @@ static void	create_tree(ssize_t nb_pipes, t_tree **root, t_term *term)
 	if (!nb_pipes)
 	{
 		curr = create_node(TK_CMD, NULL, term);
-		curr->l = create_node(TK_ARGS, NULL, term);
 		*root = curr;
 	}
 	else
@@ -41,7 +40,6 @@ static void	create_tree(ssize_t nb_pipes, t_tree **root, t_term *term)
 		{
 			curr = create_node(TK_PL, NULL, term);
 			curr->l = create_node(TK_CMD, NULL, term);
-			curr->l->l = create_node(TK_ARGS, NULL, term);
 			if (!(*root))
 			{
 				*root = curr;
@@ -54,7 +52,6 @@ static void	create_tree(ssize_t nb_pipes, t_tree **root, t_term *term)
 			}
 		}	
 		tmp->r = create_node(TK_CMD, NULL, term);
-		tmp->r->l = create_node(TK_ARGS, NULL, term);
 	}
 }
 
@@ -73,17 +70,26 @@ static void	populate_tree(t_tree **root, t_term *term)
 		cmd = ft_split(pipe_split[i], TK_SPACE, term);
 		if (tmp->type == TK_PL)
 		{
-			tmp->l->content = cmd[0];
-			tmp->l->l->content = pipe_split[i];
+			tmp->l->content = pipe_split[i];
 			tmp = tmp->r;
 		}
 		else if (tmp->type == TK_CMD)
-		{
-			tmp->content = cmd[0];
-			tmp->l->content = pipe_split[i];
-		}
+			tmp->content = pipe_split[i];
 	}
-		
+}
+
+static void	update_tree(t_term *term, t_tree **root)
+{
+	if (*root)
+	{
+		if ((*root)->type == TK_PL)
+		{
+			update_tree(term, &(*root)->l);
+			update_tree(term, &(*root)->r);
+		}
+		else
+			(*root)->content = build_cmd(term, root);
+	}
 }
 
 void	init_s(t_term *term, char *input)
@@ -103,4 +109,5 @@ void	init_s(t_term *term, char *input)
 	create_tree(term->nb_pipes, &root, term);
 	populate_tree(&root, term);
 	term->ast = root;
+	update_tree(term, &term->ast);
 }

@@ -6,41 +6,56 @@
 /*   By: smallem <smallem@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/22 11:58:39 by smallem           #+#    #+#             */
-/*   Updated: 2023/09/05 16:38:44 by smallem          ###   ########.fr       */
+/*   Updated: 2023/09/28 15:53:46 by smallem          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
 
-void	execute(t_term *term)
+void	execute(t_tree *node, char **env)
 {
-	if (execve() == -1)
+	t_cmd	*cmd;
+
+	cmd = (t_cmd *)node->content;
+	if (cmd->fd_in)
+	{
+		dup2(cmd->fd_in, 0);
+		close(cmd->fd_in);
+	}
+	if (cmd->fd_out)
+	{
+		dup2(cmd->fd_out, 1);
+		close(cmd->fd_out);
+	}
+	if (execve(cmd->path, cmd->args, env) == -1)
 	{
 		//error
 	}
 }
+// static void prep_pipe(t_term *term)
+// {
+	
+// }
 
 void	init_cmd(t_term *term)
 {
-	ssize_t	i;
+	int	i;
+	t_tree	*curr;
 
 	i = -1;
-	while (++i <= term->nb_pipes)
+	curr = term->ast;
+	while (curr)
 	{
-		term->pids[i] = fork();
-		if (term->pids[i] == -1)
+		term->pids[++i] = fork();	
+		if (!term->pids[i])
 		{
-			//handle error
-		}
-		else if (!term->pids[i])
-		{
-			if (!term->nb_pipes)
-				execute();
+			if (curr->type == TK_PL)
+				execute(curr->l, term->env);
 			else
-				prep_pipes();
+				execute(curr, term->env);
 		}
-		else if (i > 0)
-			close_pipe();
+		else
+			curr = curr->r;
 	}
 	i = -1;
 	while (++i <= term->nb_pipes)

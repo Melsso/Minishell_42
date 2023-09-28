@@ -6,7 +6,7 @@
 /*   By: smallem <smallem@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/19 18:05:52 by smallem           #+#    #+#             */
-/*   Updated: 2023/09/25 17:23:58 by smallem          ###   ########.fr       */
+/*   Updated: 2023/09/28 15:54:09 by smallem          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,7 +61,11 @@ char	**splt(char *input, t_term *term);
 int 	check_input(char *input, t_term *term);
 int		count_pipes(t_term *term);
 int		check_charset(char c);
+char	*get_path(t_term *term, char *cmd);
+t_cmd	*build_cmd(t_term *term, t_tree **node);
 
+void	init_cmd(t_term *term);
+void	execute(t_tree *node, char **env);
 
 
 #endif
