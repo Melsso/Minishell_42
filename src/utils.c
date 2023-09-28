@@ -6,7 +6,7 @@
 /*   By: smallem <smallem@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/25 20:56:41 by smallem           #+#    #+#             */
-/*   Updated: 2023/09/28 15:27:24 by smallem          ###   ########.fr       */
+/*   Updated: 2023/09/28 16:54:09 by smallem          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,10 +70,11 @@ t_cmd	*build_cmd(t_term *term, t_tree **node)
 	int		i;
 
 	cmd = (t_cmd *)my_malloc(&term->mem_lst, sizeof(t_cmd));
-	cmd->fd_in = 0;
-	cmd->fd_out = 1;
+	tmp = NULL;
 	if ((*node)->content)
 	{
+		cmd->fd_in = 0;
+		cmd->fd_out = 1;
 		tmp = (char *)(*node)->content;
 		cmd->args = ft_split(tmp, ' ', term);
 		i = -1;
@@ -96,6 +97,8 @@ t_cmd	*build_cmd(t_term *term, t_tree **node)
 			i = 0;
 		cmd_name = ft_strdup(cmd->args[i], term);
 		cmd->path = get_path(term, cmd_name);
+		if (!cmd->path)
+			return (printf("%s: command not found\n", cmd_name), NULL);
 		return (cmd);
 	}
 	return (NULL);

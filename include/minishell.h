@@ -6,7 +6,7 @@
 /*   By: smallem <smallem@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/19 18:05:52 by smallem           #+#    #+#             */
-/*   Updated: 2023/09/28 15:54:09 by smallem          ###   ########.fr       */
+/*   Updated: 2023/09/28 16:55:38 by smallem          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,6 @@ typedef struct s_cmd
 {
 	int		fd_in;
 	int		fd_out;
-	int		fd[2];
 	char	**args;
 	char	*path;
 }	t_cmd;

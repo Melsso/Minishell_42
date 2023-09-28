@@ -6,7 +6,7 @@
 /*   By: smallem <smallem@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/22 11:58:18 by smallem           #+#    #+#             */
-/*   Updated: 2023/09/28 15:23:16 by smallem          ###   ########.fr       */
+/*   Updated: 2023/09/28 16:57:33 by smallem          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -105,6 +105,8 @@ void	init_s(t_term *term, char *input)
 	if (!check_input(input, term))
 		return ;
 	term->nb_pipes = count_pipes(term);
+	if (term->nb_pipes)
+		pipe(term->fd);
 	term->pids = (pid_t *)my_malloc(&term->mem_lst, sizeof(pid_t) * (term->nb_pipes + 1));
 	create_tree(term->nb_pipes, &root, term);
 	populate_tree(&root, term);

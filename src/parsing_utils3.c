@@ -6,7 +6,7 @@
 /*   By: smallem <smallem@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/23 18:54:27 by smallem           #+#    #+#             */
-/*   Updated: 2023/09/25 18:35:05 by smallem          ###   ########.fr       */
+/*   Updated: 2023/09/28 16:54:45 by smallem          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,7 @@ int	check_syntax(char *input)
 			i++;
 			while (input[i] && (input[i] == TK_SPACE || input[i] == TK_TAB))
 				i++;
-			if (!input[i])
+			if (!input[i] || check_charset(input[i]) || input[i] == TK_LESS || input[i] == TK_GREATER)
 			{
 				printf("syntax error near unexpected token 'newline'\n");
 				return (0);	
