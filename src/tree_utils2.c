@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   utils.c                                            :+:      :+:    :+:   */
+/*   tree_utils2.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: smallem <smallem@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/25 20:56:41 by smallem           #+#    #+#             */
-/*   Updated: 2023/09/28 16:54:09 by smallem          ###   ########.fr       */
+/*   Updated: 2023/09/29 15:00:23 by smallem          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,10 +21,6 @@ char	**copy_env(char **env, t_term *term)
 	while (env[len])
 		len++;
 	new_ev = (char **)my_malloc(&term->mem_lst, sizeof(char *) * (len + 1));	
-	if (!new_ev)
-	{
-		//malloc error
-	}
 	len = -1;
 	while (env[++len])
 		new_ev[len] = ft_strdup(env[len], term);
@@ -62,6 +58,29 @@ char	*get_path(t_term *term, char *cmd)
 	return (NULL);
 }
 
+static int	open_file(t_cmd *cmd)
+{
+	int	i;
+
+	i = -1;
+	while (cmd->args[++i])
+	{
+		if (!ft_strncmp(cmd->args[i], ">", ft_strlen(cmd->args[i])) || !ft_strncmp(cmd->args[i], ">>", ft_strlen(cmd->args[i])))
+		{
+			cmd->fd_out = open(cmd->args[i + 1], O_CREAT | O_APPEND | O_WRONLY);
+			if (cmd->fd_out < 0)
+				return (printf("%s: no such file or directory\n", cmd->args[i + 1]), 0);
+		}
+		else if (!ft_strncmp(cmd->args[i], "<", ft_strlen(cmd->args[i])))
+		{
+			cmd->fd_in = open(cmd->args[i + 1], O_RDONLY);
+			if (cmd->fd_in < 0)
+				return (printf("%s: no such file or directory\n", cmd->args[i + 1]), 0);
+		}
+	}
+	return (1);
+}
+
 t_cmd	*build_cmd(t_term *term, t_tree **node)
 {
 	t_cmd	*cmd;
@@ -73,23 +92,12 @@ t_cmd	*build_cmd(t_term *term, t_tree **node)
 	tmp = NULL;
 	if ((*node)->content)
 	{
+		tmp = (char *)(*node)->content;
+		cmd->args = splt_space(tmp, term);
 		cmd->fd_in = 0;
 		cmd->fd_out = 1;
-		tmp = (char *)(*node)->content;
-		cmd->args = ft_split(tmp, ' ', term);
-		i = -1;
-		while (cmd->args[++i])
-		{
-			if (!ft_strncmp(cmd->args[i], ">", ft_strlen(cmd->args[i])))
-				cmd->fd_out = open(cmd->args[i + 1], O_CREAT | O_APPEND | O_WRONLY);
-			else if (!ft_strncmp(cmd->args[i], "<", ft_strlen(cmd->args[i])))
-				cmd->fd_in = open(cmd->args[i + 1], O_RDONLY);
-		}
-		if (cmd->fd_in < 0 || cmd->fd_out < 0)
-		{
-			// open error
-			printf("Bad file\n");
-		}
+		if (!open_file(cmd))
+			return (NULL);
 		if (!ft_strncmp(cmd->args[0], ">", ft_strlen(cmd->args[0]))
 			|| !ft_strncmp(cmd->args[0], "<", ft_strlen(cmd->args[0])))
 			i = 2;

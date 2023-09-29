@@ -5,111 +5,73 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: smallem <smallem@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/08/22 11:58:18 by smallem           #+#    #+#             */
-/*   Updated: 2023/09/28 16:57:33 by smallem          ###   ########.fr       */
+/*   Created: 2023/09/23 18:54:27 by smallem           #+#    #+#             */
+/*   Updated: 2023/09/29 15:15:50 by smallem          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
 
-static t_tree	*create_node(enum e_token type, void *content, t_term *term)
+static char	*get_msg(int flag, t_term *term)
 {
-	t_tree	*node;
-
-	node = (t_tree *)my_malloc(&term->mem_lst, sizeof(t_tree));
-	node->type = type;
-	node->content = content;
-	node->r = NULL;
-	node->l = NULL;
-	return (node);
-}
-
-static void	create_tree(ssize_t nb_pipes, t_tree **root, t_term *term)
-{
-	t_tree	*curr;
-	t_tree	*tmp;
-
-	if (!nb_pipes)
-	{
-		curr = create_node(TK_CMD, NULL, term);
-		*root = curr;
-	}
+	if (flag == 1)
+		return (ft_strdup("quote>", term));
+	else if (flag == 2)
+		return (ft_strdup("dquote>", term));
+	else if (flag == 3)
+		return (ft_strdup("pipe>", term));
+	else if (flag == 4)
+		return (ft_strdup("pipe quote>", term));
+	else if (flag == 5)
+		return (ft_strdup("pipe dquote>", term));
 	else
-	{
-		while (nb_pipes--)
-		{
-			curr = create_node(TK_PL, NULL, term);
-			curr->l = create_node(TK_CMD, NULL, term);
-			if (!(*root))
-			{
-				*root = curr;
-				tmp = *root;
-			}
-			else
-			{
-				tmp->r = curr;
-				tmp = tmp->r;
-			}
-		}	
-		tmp->r = create_node(TK_CMD, NULL, term);
-	}
+		return (NULL);
 }
 
-static void	populate_tree(t_tree **root, t_term *term)
+static void	read_more(int flag, t_term *term)
 {
-	t_tree	*tmp;
-	ssize_t	i;
-	char	**pipe_split;
-	char	**cmd;
+	char	*tmp;
+	char	*line;
 
-	pipe_split = splt(term->input, term);
-	i = -1;
-	tmp = *root;
-	while (pipe_split[++i])
+	flag = check_flag(term);
+	while (flag)
 	{
-		cmd = ft_split(pipe_split[i], TK_SPACE, term);
-		if (tmp->type == TK_PL)
-		{
-			tmp->l->content = pipe_split[i];
-			tmp = tmp->r;
-		}
-		else if (tmp->type == TK_CMD)
-			tmp->content = pipe_split[i];
+		tmp = NULL;
+		tmp = get_msg(flag, term);
+		term->input = ft_strjoin(term->input, "\n", term);
+		line = readline(tmp);
+		term->input = ft_strjoin(term->input, line, term);
+		free(line);
+		line = NULL;
+		flag = check_flag(term);
 	}
+	return ;
 }
 
-static void	update_tree(t_term *term, t_tree **root)
+static int	check_syntax(t_term *term)
 {
-	if (*root)
+	int	i;
+
+	i = skip_spaces(term->input, 0);
+	if (term->input[i] == TK_PIPE || term->input[i] == '&')
+		return (printf("syntax error near unexpected token '%c'\n", term->input[i]), 0);
+	else if (!ft_strncmp(&term->input[i], "<<", ft_strlen("<<"))
+		|| !ft_strncmp(&term->input[i], ">>", ft_strlen(">>")) || term->input[i] == TK_GREATER
+		|| term->input[i] == TK_LESS)
 	{
-		if ((*root)->type == TK_PL)
-		{
-			update_tree(term, &(*root)->l);
-			update_tree(term, &(*root)->r);
-		}
-		else
-			(*root)->content = build_cmd(term, root);
+		i = skip_spaces(term->input, i + 1);
+		if (!term->input[i])
+			return (printf("syntax error near unexpected token 'newline'\n"), 0);
 	}
+	return (1);
 }
 
-void	init_s(t_term *term, char *input)
+int	check_input(char *input, t_term *term)
 {
-	ssize_t	i;
-	t_tree	*root;
-
-	i = -1;
-	term->nb_pipes = 0;
-	term->ast = NULL;
 	term->input = NULL;
-	root = NULL;
-	if (!check_input(input, term))
-		return ;
-	term->nb_pipes = count_pipes(term);
-	if (term->nb_pipes)
-		pipe(term->fd);
-	term->pids = (pid_t *)my_malloc(&term->mem_lst, sizeof(pid_t) * (term->nb_pipes + 1));
-	create_tree(term->nb_pipes, &root, term);
-	populate_tree(&root, term);
-	term->ast = root;
-	update_tree(term, &term->ast);
+	term->input = ft_strdup(input, term);
+	if (!check_syntax(term))
+		return (0);
+	read_more(0, term);
+	return (check_syntax(term));
 }
