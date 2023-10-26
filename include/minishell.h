@@ -6,7 +6,7 @@
 /*   By: smallem <smallem@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/19 18:05:52 by smallem           #+#    #+#             */
-/*   Updated: 2023/09/29 14:19:46 by smallem          ###   ########.fr       */
+/*   Updated: 2023/10/26 15:25:50 by smallem          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,6 +47,7 @@ typedef struct s_cmd
 	int		fd_in;
 	int		fd_out;
 	char	**args;
+	int		index;
 	char	*path;
 }	t_cmd;
 
@@ -63,7 +64,7 @@ int 	check_input(char *input, t_term *term);
 int		count_pipes(t_term *term);
 // int		check_charset(char c);
 char	*get_path(t_term *term, char *cmd);
-t_cmd	*build_cmd(t_term *term, t_tree **node);
+t_cmd	*build_cmd(t_term *term, t_tree **node, int *ind);
 
 
 int	check_quotes(char *str);

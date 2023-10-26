@@ -6,7 +6,7 @@
 /*   By: smallem <smallem@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/22 11:58:18 by smallem           #+#    #+#             */
-/*   Updated: 2023/09/29 14:12:34 by smallem          ###   ########.fr       */
+/*   Updated: 2023/10/26 15:25:36 by smallem          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,26 +78,29 @@ static void	populate_tree(t_tree **root, t_term *term)
 	}
 }
 
-static void	update_tree(t_term *term, t_tree **root)
+static void	update_tree(t_term *term, t_tree **root, int *i)
 {
 	if (*root)
 	{
 		if ((*root)->type == TK_PL)
 		{
-			update_tree(term, &(*root)->l);
-			update_tree(term, &(*root)->r);
+			update_tree(term, &(*root)->l, i);
+			update_tree(term, &(*root)->r, i);
 		}
 		else
-			(*root)->content = build_cmd(term, root);
+		{
+			(*root)->content = build_cmd(term, root, i);
+			(*i)++;
+		}
 	}
 }
 
 void	init_s(t_term *term, char *input)
 {
-	ssize_t	i;
+	int	i;
 	t_tree	*root;
 
-	i = -1;
+	i = 0;
 	term->nb_pipes = 0;
 	term->ast = NULL;
 	term->input = NULL;
@@ -111,5 +114,5 @@ void	init_s(t_term *term, char *input)
 	create_tree(term->nb_pipes, &root, term);
 	populate_tree(&root, term);
 	term->ast = root;
-	update_tree(term, &term->ast);
+	update_tree(term, &term->ast, &i);
 }

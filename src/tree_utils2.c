@@ -6,7 +6,7 @@
 /*   By: smallem <smallem@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/25 20:56:41 by smallem           #+#    #+#             */
-/*   Updated: 2023/09/29 15:00:23 by smallem          ###   ########.fr       */
+/*   Updated: 2023/10/26 15:25:58 by smallem          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,7 +81,7 @@ static int	open_file(t_cmd *cmd)
 	return (1);
 }
 
-t_cmd	*build_cmd(t_term *term, t_tree **node)
+t_cmd	*build_cmd(t_term *term, t_tree **node, int *ind)
 {
 	t_cmd	*cmd;
 	char	*tmp;
@@ -96,6 +96,7 @@ t_cmd	*build_cmd(t_term *term, t_tree **node)
 		cmd->args = splt_space(tmp, term);
 		cmd->fd_in = 0;
 		cmd->fd_out = 1;
+		cmd->index = *ind;
 		if (!open_file(cmd))
 			return (NULL);
 		if (!ft_strncmp(cmd->args[0], ">", ft_strlen(cmd->args[0]))

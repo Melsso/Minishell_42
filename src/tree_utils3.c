@@ -6,7 +6,7 @@
 /*   By: smallem <smallem@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/07 16:42:21 by smallem           #+#    #+#             */
-/*   Updated: 2023/09/29 14:58:07 by smallem          ###   ########.fr       */
+/*   Updated: 2023/10/26 15:21:48 by smallem          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -107,3 +107,4 @@ char	**splt_space(char *str, t_term *term)
 	mat[i] = NULL;
 	return (mat);
 }
+
