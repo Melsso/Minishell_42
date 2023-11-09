@@ -6,7 +6,7 @@
 /*   By: smallem <smallem@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/19 18:05:52 by smallem           #+#    #+#             */
-/*   Updated: 2023/11/09 13:47:59 by smallem          ###   ########.fr       */
+/*   Updated: 2023/11/09 17:35:01 by smallem          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,15 +67,16 @@ char	*get_path(t_term *term, char *cmd);
 t_cmd	*build_cmd(t_term *term, t_tree **node, int *ind);
 
 
-int	check_quotes(char *str);
-int	check_flag(t_term *term);
+int		check_quotes(char *str);
+int		check_flag(t_term *term);
 int		skip_spaces(char *str, int i);
-int	skip_quote(char *str, int i, char c);
+int		skip_quote(char *str, int i, char c);
 
 // void	init_cmd(t_term *term);
 // void	execute(t_tree *node, char **env);
 
-int execution(t_term *term);
+int 	execution(t_term *term);
+void	expand(t_term *term, t_tree *node);
 
 
 #endif

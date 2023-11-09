@@ -9,6 +9,7 @@ SRC		:=	main.c \
 			parsing_utils.c \
 			parsing_utils2.c \
 			exe_utils.c \
+			expand.c \
 			my_malloc.c \
 			tree_utils.c \
 			tree_utils2.c \

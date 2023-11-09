@@ -1,0 +1,8 @@
+Makefile
+include
+libs
+minishell
+obj
+out
+read.md
+src

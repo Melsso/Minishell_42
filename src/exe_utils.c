@@ -6,7 +6,7 @@
 /*   By: smallem <smallem@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/22 11:58:39 by smallem           #+#    #+#             */
-/*   Updated: 2023/11/09 15:56:10 by smallem          ###   ########.fr       */
+/*   Updated: 2023/11/09 18:26:16 by smallem          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,7 +85,7 @@ int execution(t_term *term)
 	int tmp;
 	int fd[2];
 
-// dprintf(0, "9lawi\n");
+	expand(term, term->ast);
 	tmp = dup(STDIN_FILENO);
 	if (!term->ast)
 		return 1;
