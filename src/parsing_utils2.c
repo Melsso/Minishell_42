@@ -6,7 +6,7 @@
 /*   By: smallem <smallem@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/05 14:21:51 by smallem           #+#    #+#             */
-/*   Updated: 2023/10/26 15:28:07 by smallem          ###   ########.fr       */
+/*   Updated: 2023/11/09 13:41:51 by smallem          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ void print_tree(t_tree* root) {
 			printf("Args:\n");
 			while (cmd->args[++i])
 				printf("	-%s\n", cmd->args[i]);
-        	printf("Type: %d\nIndex: %d\nPath: %s\n fd_in: %d\n fd_out: %d\n", root->type, cmd->index, cmd->path, cmd->fd_in, cmd->fd_out);
+        	printf("\nType: %d\nIndex: %d\nPath: %s\n fd_in: %d\n fd_out: %d\n\n", root->type, cmd->index, cmd->path, cmd->fd_in, cmd->fd_out);
 		}
         print_tree(root->r);
     }

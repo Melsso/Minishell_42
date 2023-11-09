@@ -6,7 +6,7 @@
 /*   By: smallem <smallem@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/07 16:42:21 by smallem           #+#    #+#             */
-/*   Updated: 2023/10/26 15:21:48 by smallem          ###   ########.fr       */
+/*   Updated: 2023/11/09 13:39:50 by smallem          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ char	**splt(char *str, t_term *term)
 	int		i;
 	int		j;
 
-	mat = (char **)my_malloc(&term->mem_lst, sizeof(char *) * (mat_size(str) + 1));
+	mat = (char **)my_malloc(&term->mem_lst, sizeof(char *) * (mat_size(str) + 2));
 	j = 0;
 	i = 0;
 	while (str[i])
@@ -46,6 +46,7 @@ char	**splt(char *str, t_term *term)
 		{
 			mat[j++] = ft_substr(str, 0, i, term);
 			str = str + i + 1;
+			i = 0;
 		}
 		else
 			i++;

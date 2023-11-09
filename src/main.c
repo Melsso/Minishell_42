@@ -6,7 +6,7 @@
 /*   By: smallem <smallem@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/19 18:03:00 by smallem           #+#    #+#             */
-/*   Updated: 2023/09/28 17:11:39 by smallem          ###   ########.fr       */
+/*   Updated: 2023/11/09 15:58:25 by smallem          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,8 +26,7 @@ static void	main_loop(t_term *term, char **env)
 		{
 			init_s(term, input);
 			add_history(term->input);
-			print_tree(term->ast);
-			// init_cmd(term);
+			execution(term);
 		}
 		else if (!input)
 			break ;
@@ -46,5 +45,5 @@ int	main(int argc, char **argv, char **envp)
 	if (argc != 1)
 		printf("No arguments allowed\n");
 	main_loop(&term, envp);	
-	return (0);	
+	exit(0);
 }
