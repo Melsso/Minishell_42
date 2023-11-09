@@ -6,7 +6,7 @@
 /*   By: smallem <smallem@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/09 17:32:00 by smallem           #+#    #+#             */
-/*   Updated: 2023/11/09 18:15:21 by smallem          ###   ########.fr       */
+/*   Updated: 2023/11/09 19:13:55 by smallem          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,31 +34,34 @@ char	*fetch_line(char *to_find, t_term *term)
 static void	expand_cmd(t_cmd *cmd, t_term *term)
 {
 	int		i;
-	char	*to_find;
+	int		j;
+	char	**to_find;
+	char	*tmp;
+	char	*t;
 	char	*line;
 
-	i = 0;
-	while (cmd->args[i])
+	i = -1;
+	line = ft_strdup("", term);
+	while (cmd->args[++i])
 	{
-		to_find = ft_strchr(cmd->args[i], '$');
-		if (to_find)
+		tmp = ft_strchr(cmd->args[i], '$');
+		if (tmp)
 		{
-			to_find++;
-			if (*to_find == '?')
-				cmd->args[i] = ft_itoa(ex_stat, term);
-			else if (*to_find != 0)
+			to_find = ft_split(tmp, '$', term);
+			j = -1;
+			while (to_find[++j])
 			{
-				line = fetch_line(to_find, term);
-				if (line)
-					cmd->args[i] = line;
-				else
-					cmd->args[i] = ft_strdup("", term);
+				t = to_find[j];
+				if (to_find[j][0] == '?')
+					line = ft_strjoin(line, ft_itoa(ex_stat, term), term);
+				else if (to_find[j][0] != 0 && to_find[j][0] != TK_SQUOTE && to_find[j][0] != TK_DQUOTE)
+					line = ft_strjoin(line, fetch_line(t, term), term);
 			}
 		}
-		i++;
+		cmd->args[i] = line;
 	}
 }
-
+/// above function needs ot be fixed to handle $PWD$ or simply one dollar sign
 void	expand(t_term *term, t_tree *node)
 {
 	t_cmd	*cmd;
