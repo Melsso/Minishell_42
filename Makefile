@@ -1,6 +1,6 @@
 NAME = minishell
 CC = cc
-CFLAGS = -Wall -Werror -Wextra
+CFLAGS = 
 
 OBJ_DIR = obj/
 SRC_DIR = src/
@@ -10,6 +10,7 @@ SRC		:=	main.c \
 			parsing_utils2.c \
 			exe_utils.c \
 			expand.c \
+			clean.c \
 			my_malloc.c \
 			tree_utils.c \
 			tree_utils2.c \

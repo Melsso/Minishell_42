@@ -6,7 +6,7 @@
 /*   By: smallem <smallem@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/19 18:05:52 by smallem           #+#    #+#             */
-/*   Updated: 2023/11/12 13:18:20 by smallem          ###   ########.fr       */
+/*   Updated: 2023/11/12 19:00:13 by smallem          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,6 +46,7 @@ typedef struct s_cmd
 {
 	int		fd_in;
 	int		fd_out;
+	int		*red;
 	char	**args;
 	int		index;
 	char	*path;
@@ -63,7 +64,6 @@ char	**my_split(char *str, t_term *term);
 
 int 	check_input(char *input, t_term *term);
 int		count_pipes(t_term *term);
-// int		check_charset(char c);
 char	*get_path(t_term *term, char *cmd);
 t_cmd	*build_cmd(t_term *term, t_tree **node, int *ind);
 
@@ -73,11 +73,10 @@ int		check_flag(t_term *term);
 int		skip_spaces(char *str, int i);
 int		skip_quote(char *str, int i, char c);
 
-// void	init_cmd(t_term *term);
-// void	execute(t_tree *node, char **env);
 
-int 	execution(t_term *term);
 void	expand(t_term *term, t_tree *node);
+void	clean(t_term *term);
+int 	execution(t_term *term);
 
 
 #endif

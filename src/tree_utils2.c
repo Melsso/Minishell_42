@@ -6,7 +6,7 @@
 /*   By: smallem <smallem@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/25 20:56:41 by smallem           #+#    #+#             */
-/*   Updated: 2023/11/09 16:58:53 by smallem          ###   ########.fr       */
+/*   Updated: 2023/11/12 19:11:49 by smallem          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,72 +58,28 @@ char	*get_path(t_term *term, char *cmd)
 	return (NULL);
 }
 
-static void	fix_args(t_cmd *cmd, t_term *term)
-{
-	int		size;
-	int		i;
-	char	**args;
-
-	i = 0;
-	size = 0;
-	while (cmd->args[i])
-	{
-		if (!ft_strncmp(cmd->args[i], ">", ft_strlen(cmd->args[i]))
-		|| !ft_strncmp(cmd->args[i], ">>", ft_strlen(cmd->args[i]))
-		|| !ft_strncmp(cmd->args[i], "<", ft_strlen(cmd->args[i]))
-		|| !ft_strncmp(cmd->args[i], "<<", ft_strlen(cmd->args[i])))
-			size++;
-		i++;
-	}	
-	args = (char **)my_malloc(&term->mem_lst, sizeof(char *) * (i - (size * 2)));
-	size = 0;
-	i = 0;
-	while (cmd->args[i])
-	{
-		if (!ft_strncmp(cmd->args[i], ">", ft_strlen(cmd->args[i]))
-		|| !ft_strncmp(cmd->args[i], ">>", ft_strlen(cmd->args[i]))
-		|| !ft_strncmp(cmd->args[i], "<", ft_strlen(cmd->args[i]))
-		|| !ft_strncmp(cmd->args[i], "<<", ft_strlen(cmd->args[i])))
-			i += 2;
-		else
-		{
-			args[size] = ft_strdup(cmd->args[i], term);
-			i++;
-			size++;
-		}
-	}
-	args[size] = NULL;
-	cmd->args = args;
-}
-
-static void	open_file(t_cmd *cmd)
+static void	check_rd(char **args, int *red)
 {
 	int	i;
+	int	j;
 
-	i = -1;
-	while (cmd->args[++i])
+	i = 0;
+	while (args[i])
 	{
-		if (!ft_strncmp(cmd->args[i], ">", ft_strlen(cmd->args[i])) || !ft_strncmp(cmd->args[i], ">>", ft_strlen(cmd->args[i])))
+		j = 0;
+		red[i] = 0;
+		while (args[i][j])
 		{
-			if (!ft_strncmp(cmd->args[i], ">", ft_strlen(cmd->args[i])))
-				cmd->fd_out = open(cmd->args[i + 1], O_CREAT | O_TRUNC | O_WRONLY, 0644);
-			else
-				cmd->fd_out = open(cmd->args[i + 1], O_CREAT | O_APPEND | O_WRONLY, 0644);
-			if (cmd->fd_out < 0)
+			if (args[i][j] == TK_SQUOTE || args[i][j] == TK_DQUOTE)
+				j = skip_quote(args[i], j, args[i][j]);
+			else if (args[i][j] == '>' || args[i][j] == '<')
 			{
-				printf("%s: no such file or directory\n", cmd->args[i + 1]);
-				ex_stat = errno;
+				red[i] = 1;
+				break ;
 			}
+			j++;
 		}
-		else if (!ft_strncmp(cmd->args[i], "<", ft_strlen(cmd->args[i])))
-		{
-			cmd->fd_in = open(cmd->args[i + 1], O_RDONLY);
-			if (cmd->fd_in < 0)
-			{
-				printf("%s: no such file or directory\n", cmd->args[i + 1]);
-				ex_stat = errno;
-			}
-		}
+		i++;
 	}
 }
 
@@ -131,7 +87,6 @@ t_cmd	*build_cmd(t_term *term, t_tree **node, int *ind)
 {
 	t_cmd	*cmd;
 	char	*tmp;
-	char	*cmd_name;
 	int		i;
 
 	cmd = (t_cmd *)my_malloc(&term->mem_lst, sizeof(t_cmd));
@@ -143,17 +98,11 @@ t_cmd	*build_cmd(t_term *term, t_tree **node, int *ind)
 		cmd->fd_in = 0;
 		cmd->fd_out = 1;
 		cmd->index = *ind;
-		open_file(cmd);
-		if (!ft_strncmp(cmd->args[0], ">", ft_strlen(cmd->args[0]))
-			|| !ft_strncmp(cmd->args[0], "<", ft_strlen(cmd->args[0])))
-			i = 2;
-		else
-			i = 0;
-		cmd_name = ft_strdup(cmd->args[i], term);
-		cmd->path = get_path(term, cmd_name);
-		if (!cmd->path)
-			printf("%s: command not found\n", cmd_name);
-		fix_args(cmd, term);
+		i = 0;
+		while (cmd->args[i])
+			i++;
+		cmd->red = (int *)my_malloc(&term->mem_lst, sizeof(int) * i);
+		check_rd(cmd->args, cmd->red);
 		return (cmd);
 	}
 	return (NULL);

@@ -6,7 +6,7 @@
 /*   By: smallem <smallem@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/09 17:32:00 by smallem           #+#    #+#             */
-/*   Updated: 2023/11/12 13:32:49 by smallem          ###   ########.fr       */
+/*   Updated: 2023/11/12 19:27:14 by smallem          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,17 @@ char	*fetch_line(char *to_find, t_term *term)
 	return (NULL);
 }
 
+// char	*ret_line(t_term *term, char *arg)
+// {
+// 	char	*tmp;
+
+// 	tmp = ft_strchr(arg, '$');
+// 	if (tmp)
+// 	{
+		
+// 	}
+// }
+
 static void	expand_cmd(t_cmd *cmd, t_term *term)
 {
 	int		i;
@@ -41,7 +52,7 @@ static void	expand_cmd(t_cmd *cmd, t_term *term)
 	char	*line;
 
 	i = -1;
-	line = ft_strdup("", term);
+	line = NULL;
 	while (cmd->args[++i])
 	{
 		tmp = ft_strchr(cmd->args[i], '$');
@@ -59,8 +70,9 @@ static void	expand_cmd(t_cmd *cmd, t_term *term)
 				else if (to_find[j][1] == 0)
 					line = ft_strjoin(line, "$", term);
 			}
+			cmd->args[i] = line;
+			line = NULL;
 		}
-		cmd->args[i] = line;
 	}
 }
 /// above function needs ot be tested further
