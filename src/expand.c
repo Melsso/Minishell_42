@@ -6,7 +6,7 @@
 /*   By: smallem <smallem@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/09 17:32:00 by smallem           #+#    #+#             */
-/*   Updated: 2023/11/09 19:13:55 by smallem          ###   ########.fr       */
+/*   Updated: 2023/11/12 13:32:49 by smallem          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,21 +47,23 @@ static void	expand_cmd(t_cmd *cmd, t_term *term)
 		tmp = ft_strchr(cmd->args[i], '$');
 		if (tmp)
 		{
-			to_find = ft_split(tmp, '$', term);
+			to_find = my_split(tmp, term);
 			j = -1;
 			while (to_find[++j])
 			{
 				t = to_find[j];
-				if (to_find[j][0] == '?')
+				if (to_find[j][1] == '?')
 					line = ft_strjoin(line, ft_itoa(ex_stat, term), term);
-				else if (to_find[j][0] != 0 && to_find[j][0] != TK_SQUOTE && to_find[j][0] != TK_DQUOTE)
-					line = ft_strjoin(line, fetch_line(t, term), term);
+				else if (to_find[j][1] != 0 && to_find[j][1] != TK_SQUOTE && to_find[j][1] != TK_DQUOTE)
+					line = ft_strjoin(line, fetch_line(++t, term), term);
+				else if (to_find[j][1] == 0)
+					line = ft_strjoin(line, "$", term);
 			}
 		}
 		cmd->args[i] = line;
 	}
 }
-/// above function needs ot be fixed to handle $PWD$ or simply one dollar sign
+/// above function needs ot be tested further
 void	expand(t_term *term, t_tree *node)
 {
 	t_cmd	*cmd;

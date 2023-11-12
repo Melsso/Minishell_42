@@ -6,7 +6,7 @@
 /*   By: smallem <smallem@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/07 16:42:21 by smallem           #+#    #+#             */
-/*   Updated: 2023/11/09 13:39:50 by smallem          ###   ########.fr       */
+/*   Updated: 2023/11/12 13:23:07 by smallem          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -109,3 +109,43 @@ char	**splt_space(char *str, t_term *term)
 	return (mat);
 }
 
+static int	count(char *str)
+{
+	int	len;
+
+	len = 0;
+	while (*str)
+	{
+		if (*str == TK_DOLLAR)
+			len++;
+		str++;
+	}
+	return (len);
+}
+
+char	**my_split(char *str, t_term *term)
+{
+	char	**arr;
+	char	*tmp;
+	int		i;
+
+	i = 0;
+	arr = (char **)my_malloc(&term->mem_lst, sizeof(char *) * (count(str) + 1));
+	tmp = str;
+	while (*tmp)
+	{
+		if (*tmp == TK_DOLLAR)
+		{
+			str = tmp;
+			tmp++;
+			while (*tmp && *tmp != TK_DOLLAR)
+				tmp++;
+			arr[i] = ft_substr(str, 0, tmp - str, term);
+			i++;
+		}
+		else
+			tmp++;
+	}
+	arr[i] = NULL;
+	return (arr);
+}

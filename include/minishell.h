@@ -6,7 +6,7 @@
 /*   By: smallem <smallem@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/19 18:05:52 by smallem           #+#    #+#             */
-/*   Updated: 2023/11/09 17:35:01 by smallem          ###   ########.fr       */
+/*   Updated: 2023/11/12 13:18:20 by smallem          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,6 +59,7 @@ void	init_s(t_term *term, char *input);
 char	**copy_env(char **env, t_term *term);
 char	**splt(char *input, t_term *term);
 char	**splt_space(char *str, t_term *term);
+char	**my_split(char *str, t_term *term);
 
 int 	check_input(char *input, t_term *term);
 int		count_pipes(t_term *term);
