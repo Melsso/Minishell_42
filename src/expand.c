@@ -6,7 +6,7 @@
 /*   By: smallem <smallem@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/09 17:32:00 by smallem           #+#    #+#             */
-/*   Updated: 2023/11/12 19:27:14 by smallem          ###   ########.fr       */
+/*   Updated: 2023/11/13 19:46:11 by smallem          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,11 +16,14 @@ char	*fetch_line(char *to_find, t_term *term)
 {
 	int		i;
 	char	*val;
+	char	**lst;
 
 	i = 0;
 	while (term->env[i])
 	{
-		if (!ft_strncmp(term->env[i], to_find, ft_strlen(to_find)))
+		lst = NULL;
+		lst = ft_split(term->env[i], '=', term);
+		if (!ft_strncmp(lst[0], to_find, ft_strlen(to_find)) && !ft_strncmp(lst[0], to_find, ft_strlen(lst[0])))
 		{
 			val = ft_strdup(&term->env[i][ft_strlen(to_find) + 1], term);
 			return (val);
@@ -28,53 +31,86 @@ char	*fetch_line(char *to_find, t_term *term)
 		else
 			i++;
 	}
-	return (NULL);
+	return (ft_strdup("", term));
 }
 
-// char	*ret_line(t_term *term, char *arg)
-// {
-// 	char	*tmp;
+static int	is_in_quote(char *str, int pos)
+{
+	int	i;
 
-// 	tmp = ft_strchr(arg, '$');
-// 	if (tmp)
-// 	{
-		
-// 	}
-// }
-
+	i = 0;
+	while (str[i])
+	{
+		if (str[i] == TK_SQUOTE)
+		{
+			while (str[i] && str[i] != TK_SQUOTE)
+			{
+				if (i == pos)
+					return (1);
+				i++;
+			}
+		}
+		else if (str[i] == TK_DQUOTE)
+		{
+			while (str[i] && str[i] != TK_DQUOTE)
+			{
+				if (i == pos)
+					return (2);
+				i++;
+			}
+		}
+		else
+			i++;
+	}
+	return (0);
+}
 static void	expand_cmd(t_cmd *cmd, t_term *term)
 {
 	int		i;
 	int		j;
-	char	**to_find;
+	int		k;
+	int		len;
 	char	*tmp;
-	char	*t;
+	char	*name;
 	char	*line;
 
 	i = -1;
-	line = NULL;
 	while (cmd->args[++i])
 	{
-		tmp = ft_strchr(cmd->args[i], '$');
-		if (tmp)
+		tmp = cmd->args[i];
+		j = 0;
+		line = NULL;
+		while (tmp[j])
 		{
-			to_find = my_split(tmp, term);
-			j = -1;
-			while (to_find[++j])
+			if (tmp[j] == TK_SQUOTE)
 			{
-				t = to_find[j];
-				if (to_find[j][1] == '?')
-					line = ft_strjoin(line, ft_itoa(ex_stat, term), term);
-				else if (to_find[j][1] != 0 && to_find[j][1] != TK_SQUOTE && to_find[j][1] != TK_DQUOTE)
-					line = ft_strjoin(line, fetch_line(++t, term), term);
-				else if (to_find[j][1] == 0)
-					line = ft_strjoin(line, "$", term);
+				// printf("--%s--\n", tmp);
+				j = skip_quote(tmp, j, TK_SQUOTE) + 1;
+				// printf("--%s--\n", tmp);
 			}
-			cmd->args[i] = line;
-			line = NULL;
+			else
+			{
+				if (tmp[j] == TK_DOLLAR)
+				{
+					k = j;
+					while (tmp[k] && tmp[k] != TK_SPACE && tmp[k] != TK_SQUOTE && tmp[k] != TK_DQUOTE)
+						k++;
+					name = ft_substr(tmp, j + 1, k - j - 1, term);
+					line = fetch_line(name, term);
+					len = ft_strlen(line) + j;
+					line = ft_strjoin(ft_substr(tmp, 0, j, term), line, term);
+					j = len;
+					line = ft_strjoin(line, ft_substr(tmp, k, ft_strlen(tmp), term), term);
+					tmp = line;
+				}
+				else
+					j++;
+			}
 		}
+		cmd->args[i] = tmp;
 	}
 }
+
 /// above function needs ot be tested further
 void	expand(t_term *term, t_tree *node)
 {
