@@ -6,7 +6,7 @@
 /*   By: smallem <smallem@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/09 17:32:00 by smallem           #+#    #+#             */
-/*   Updated: 2023/11/13 19:46:11 by smallem          ###   ########.fr       */
+/*   Updated: 2023/11/16 13:13:40 by smallem          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,11 +19,13 @@ char	*fetch_line(char *to_find, t_term *term)
 	char	**lst;
 
 	i = 0;
+	if (to_find[0] == TK_QST)
+		return (ft_itoa(ex_stat, term));
 	while (term->env[i])
 	{
-		lst = NULL;
 		lst = ft_split(term->env[i], '=', term);
-		if (!ft_strncmp(lst[0], to_find, ft_strlen(to_find)) && !ft_strncmp(lst[0], to_find, ft_strlen(lst[0])))
+		if (!ft_strncmp(lst[0], to_find, ft_strlen(to_find))
+			&& !ft_strncmp(lst[0], to_find, ft_strlen(lst[0])))
 		{
 			val = ft_strdup(&term->env[i][ft_strlen(to_find) + 1], term);
 			return (val);
@@ -34,96 +36,118 @@ char	*fetch_line(char *to_find, t_term *term)
 	return (ft_strdup("", term));
 }
 
-static int	is_in_quote(char *str, int pos)
+static t_fetch	*fill_fetch(char *str, t_term *term, int len)
 {
-	int	i;
+	t_fetch	*to_fetch;
+	int		i;
+	int		k;
+	int		j;
 
+	if (!len)
+		return (NULL);
+	to_fetch = (t_fetch *)my_malloc(&term->mem_lst, sizeof(t_fetch) * (len));
 	i = 0;
+	k = 0;
 	while (str[i])
 	{
 		if (str[i] == TK_SQUOTE)
+			i = skip_quote(&str[i], i, TK_SQUOTE);
+		else if (str[i] == TK_DOLLAR)
 		{
-			while (str[i] && str[i] != TK_SQUOTE)
-			{
-				if (i == pos)
-					return (1);
-				i++;
-			}
-		}
-		else if (str[i] == TK_DQUOTE)
-		{
-			while (str[i] && str[i] != TK_DQUOTE)
-			{
-				if (i == pos)
-					return (2);
-				i++;
-			}
+			j = i + 1;
+			while (str[j] && str[j] != TK_SPACE && str[j] != TK_DOLLAR && str[j] != TK_DQUOTE)
+				j++;
+			to_fetch[k].name = ft_substr(str, i, j - i, term);
+			to_fetch[k].start = i;
+			if (ft_strlen(to_fetch[k].name) == 1)
+				to_fetch[k].val = ft_strdup("$", term);
+			else
+				to_fetch[k].val = fetch_line(&to_fetch[k].name[1], term);
+			to_fetch[k++].end = j;
+			i = j;
 		}
 		else
 			i++;
 	}
-	return (0);
+	return (to_fetch);
 }
-static void	expand_cmd(t_cmd *cmd, t_term *term)
+
+static char	**create_lines(char *str, t_fetch *to_fetch, int len, t_term *term)
 {
-	int		i;
-	int		j;
+	char	**mat;
 	int		k;
-	int		len;
-	char	*tmp;
-	char	*name;
-	char	*line;
+	int		line_size;
 
-	i = -1;
-	while (cmd->args[++i])
+	mat = (char **)my_malloc(&term->mem_lst, sizeof(char *) * 3);
+	mat[2] = NULL;
+	line_size = ft_strlen(str);
+	k = 0;
+	if (to_fetch)
 	{
-		tmp = cmd->args[i];
-		j = 0;
-		line = NULL;
-		while (tmp[j])
+		while (k < len)
 		{
-			if (tmp[j] == TK_SQUOTE)
-			{
-				// printf("--%s--\n", tmp);
-				j = skip_quote(tmp, j, TK_SQUOTE) + 1;
-				// printf("--%s--\n", tmp);
-			}
-			else
-			{
-				if (tmp[j] == TK_DOLLAR)
-				{
-					k = j;
-					while (tmp[k] && tmp[k] != TK_SPACE && tmp[k] != TK_SQUOTE && tmp[k] != TK_DQUOTE)
-						k++;
-					name = ft_substr(tmp, j + 1, k - j - 1, term);
-					line = fetch_line(name, term);
-					len = ft_strlen(line) + j;
-					line = ft_strjoin(ft_substr(tmp, 0, j, term), line, term);
-					j = len;
-					line = ft_strjoin(line, ft_substr(tmp, k, ft_strlen(tmp), term), term);
-					tmp = line;
-				}
-				else
-					j++;
-			}
+			line_size = line_size - ft_strlen(to_fetch[k].name) + ft_strlen(to_fetch[k].val);
+			k++;
 		}
-		cmd->args[i] = tmp;
+	}
+	mat[0] = (char *)my_malloc(&term->mem_lst, line_size);
+	mat[0][line_size] = 0;
+	mat[1] = (char *)my_malloc(&term->mem_lst, line_size);
+	mat[1][line_size] = 0;
+	return (mat);
+}
+
+static void	fill_lines(char *str, char **mat, t_fetch *to_fetch)
+{
+	int	i;
+	int	j;
+	int	k;
+	int	n;
+
+	n = 0;
+	i = 0;
+	k = 0;
+	j = 0;
+	while (str[i])
+	{
+		if (str[i] == TK_DOLLAR)
+		{
+			n = 0;
+			while (to_fetch[k].val[n])
+			{
+				if (to_fetch[k].val[n] == TK_SQUOTE || to_fetch[k].val[n] == TK_DQUOTE)
+					mat[1][j] = to_fetch[k].val[n];
+				else
+					mat[1][j] = '0';
+				mat[0][j++] = to_fetch[k].val[n++];
+			}
+			i = to_fetch[k++].end;
+		}
+		else
+		{
+			mat[1][j] = '0';
+			mat[0][j++] = str[i++];
+		}
 	}
 }
 
-/// above function needs ot be tested further
-void	expand(t_term *term, t_tree *node)
+void	expand(t_term *term, t_cmd *cmd, char *str)
 {
-	t_cmd	*cmd;
+	int	i;
+	int		len;
+	t_fetch	*to_fetch;
+	char **mat;
 
-	if (node->type == TK_PL)
+	i = 0;
+	len = 0;
+	while (str[i])
 	{
-		expand(term, node->l);
-		expand(term, node->r);
+		if (str[i] == TK_DOLLAR)
+			len++;
+		i++;
 	}
-	else if (node->type == TK_CMD)
-	{
-		cmd = (t_cmd *)node->content;
-		expand_cmd(cmd, term);		
-	}
+	to_fetch = fill_fetch(str, term, len);
+	mat = create_lines(str, to_fetch, len, term);
+	fill_lines(str, mat, to_fetch);
+	cmd->args = splt_space(mat[0], mat[1], term);
 }

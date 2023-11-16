@@ -6,7 +6,7 @@
 /*   By: smallem <smallem@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/22 11:58:39 by smallem           #+#    #+#             */
-/*   Updated: 2023/11/12 19:23:00 by smallem          ###   ########.fr       */
+/*   Updated: 2023/11/13 16:21:25 by smallem          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -177,9 +177,8 @@ int execution(t_term *term)
 	int tmp;
 	int fd[2];
 
-	expand(term, term->ast);
 	// clean(term); need to remove quotes after expantion
-	iter_tree(term, term->ast);
+	// iter_tree(term, term->ast);
 	tmp = dup(STDIN_FILENO);
 	if (!term->ast)
 		return 1;

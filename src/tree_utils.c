@@ -6,7 +6,7 @@
 /*   By: smallem <smallem@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/22 11:58:18 by smallem           #+#    #+#             */
-/*   Updated: 2023/11/09 13:07:40 by smallem          ###   ########.fr       */
+/*   Updated: 2023/11/13 12:37:25 by smallem          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,7 +67,6 @@ static void	populate_tree(t_tree **root, t_term *term)
 	tmp = *root;
 	while (pipe_split[++i])
 	{
-		cmd = ft_split(pipe_split[i], TK_SPACE, term);
 		if (tmp->type == TK_PL)
 		{
 			tmp->l->content = pipe_split[i];

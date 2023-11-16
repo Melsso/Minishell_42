@@ -6,7 +6,7 @@
 /*   By: smallem <smallem@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/25 20:56:41 by smallem           #+#    #+#             */
-/*   Updated: 2023/11/12 19:11:49 by smallem          ###   ########.fr       */
+/*   Updated: 2023/11/16 12:30:31 by smallem          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,24 +86,24 @@ static void	check_rd(char **args, int *red)
 t_cmd	*build_cmd(t_term *term, t_tree **node, int *ind)
 {
 	t_cmd	*cmd;
-	char	*tmp;
+	char	*str;
 	int		i;
+	int		j;
 
 	cmd = (t_cmd *)my_malloc(&term->mem_lst, sizeof(t_cmd));
-	tmp = NULL;
 	if ((*node)->content)
 	{
-		tmp = (char *)(*node)->content;
-		cmd->args = splt_space(tmp, term);
+		str = (char *)(*node)->content;
 		cmd->fd_in = 0;
 		cmd->fd_out = 1;
 		cmd->index = *ind;
-		i = 0;
-		while (cmd->args[i])
-			i++;
-		cmd->red = (int *)my_malloc(&term->mem_lst, sizeof(int) * i);
-		check_rd(cmd->args, cmd->red);
+		expand(term, cmd, str);
+		// clean str
 		return (cmd);
 	}
 	return (NULL);
 }
+//// pipe split
+//// expand
+//// redirect
+//// space split
