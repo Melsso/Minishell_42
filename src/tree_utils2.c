@@ -6,7 +6,7 @@
 /*   By: smallem <smallem@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/25 20:56:41 by smallem           #+#    #+#             */
-/*   Updated: 2023/11/16 12:30:31 by smallem          ###   ########.fr       */
+/*   Updated: 2023/11/16 18:30:42 by smallem          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,13 +97,9 @@ t_cmd	*build_cmd(t_term *term, t_tree **node, int *ind)
 		cmd->fd_in = 0;
 		cmd->fd_out = 1;
 		cmd->index = *ind;
-		expand(term, cmd, str);
-		// clean str
+		if (!expand(term, cmd, str))
+			return (NULL);
 		return (cmd);
 	}
 	return (NULL);
 }
-//// pipe split
-//// expand
-//// redirect
-//// space split

@@ -10,6 +10,7 @@ SRC		:=	main.c \
 			parsing_utils2.c \
 			exe_utils.c \
 			expand.c \
+			redirection.c \
 			clean.c \
 			my_malloc.c \
 			tree_utils.c \

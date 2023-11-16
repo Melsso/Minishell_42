@@ -6,7 +6,7 @@
 /*   By: smallem <smallem@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/19 18:05:52 by smallem           #+#    #+#             */
-/*   Updated: 2023/11/16 12:31:27 by smallem          ###   ########.fr       */
+/*   Updated: 2023/11/16 18:28:57 by smallem          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,7 +64,7 @@ typedef struct s_cmd
 int	ex_stat;
 
 void 	print_tree(t_tree* root);
-void	init_s(t_term *term, char *input);
+int		init_s(t_term *term, char *input);
 char	**copy_env(char **env, t_term *term);
 char	**splt(char *input, t_term *term);
 char	**splt_space(char *str, char *str_tok, t_term *term);
@@ -82,7 +82,8 @@ int		skip_spaces(char *str, int i);
 int		skip_quote(char *str, int i, char c);
 
 
-void	expand(t_term *term, t_cmd *cmd, char *str);
+int		expand(t_term *term, t_cmd *cmd, char *str);
+int		redirect(t_cmd *cmd, char **mat, t_term *term);
 void	clean(t_term *term);
 int 	execution(t_term *term);
 

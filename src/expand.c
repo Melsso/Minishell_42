@@ -6,7 +6,7 @@
 /*   By: smallem <smallem@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/09 17:32:00 by smallem           #+#    #+#             */
-/*   Updated: 2023/11/16 13:13:40 by smallem          ###   ########.fr       */
+/*   Updated: 2023/11/16 18:24:02 by smallem          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -103,19 +103,25 @@ static void	fill_lines(char *str, char **mat, t_fetch *to_fetch)
 	int	j;
 	int	k;
 	int	n;
+	int	flag;
 
 	n = 0;
 	i = 0;
 	k = 0;
 	j = 0;
+	flag = 0;
 	while (str[i])
 	{
-		if (str[i] == TK_DOLLAR)
+		if (str[i] == TK_SQUOTE)
+			flag++;
+		if (str[i] == TK_DOLLAR && flag % 2 == 0)
 		{
 			n = 0;
 			while (to_fetch[k].val[n])
 			{
 				if (to_fetch[k].val[n] == TK_SQUOTE || to_fetch[k].val[n] == TK_DQUOTE)
+					mat[1][j] = to_fetch[k].val[n];
+				else if (to_fetch[k].val[n] == TK_GREATER || to_fetch[k].val[n] == TK_LESS)
 					mat[1][j] = to_fetch[k].val[n];
 				else
 					mat[1][j] = '0';
@@ -131,7 +137,7 @@ static void	fill_lines(char *str, char **mat, t_fetch *to_fetch)
 	}
 }
 
-void	expand(t_term *term, t_cmd *cmd, char *str)
+int	expand(t_term *term, t_cmd *cmd, char *str)
 {
 	int	i;
 	int		len;
@@ -142,12 +148,17 @@ void	expand(t_term *term, t_cmd *cmd, char *str)
 	len = 0;
 	while (str[i])
 	{
-		if (str[i] == TK_DOLLAR)
+		if (str[i] == TK_SQUOTE)
+			i = skip_quote(str, i + 1, str[i]) + 1;
+		else if (str[i] == TK_DOLLAR)
 			len++;
 		i++;
 	}
 	to_fetch = fill_fetch(str, term, len);
 	mat = create_lines(str, to_fetch, len, term);
 	fill_lines(str, mat, to_fetch);
+	if (!redirect(cmd, mat, term))
+		return (0);
 	cmd->args = splt_space(mat[0], mat[1], term);
+	return (1);
 }

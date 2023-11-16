@@ -6,7 +6,7 @@
 /*   By: smallem <smallem@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/07 16:42:21 by smallem           #+#    #+#             */
-/*   Updated: 2023/11/16 12:45:51 by smallem          ###   ########.fr       */
+/*   Updated: 2023/11/16 13:29:02 by smallem          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,7 +82,6 @@ static int	skip_q(char *str, int i, char c, char *str_tok)
 {
 	while (str[i])
 	{
-		// printf("here\n");
 		if (str[i] != c || (str[i] == c && str_tok[i] == c))
 			i++;
 		else if (str[i] == c && str_tok[i] != c)

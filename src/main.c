@@ -6,7 +6,7 @@
 /*   By: smallem <smallem@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/19 18:03:00 by smallem           #+#    #+#             */
-/*   Updated: 2023/11/13 16:33:15 by smallem          ###   ########.fr       */
+/*   Updated: 2023/11/16 18:40:08 by smallem          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,11 @@ static void	main_loop(t_term *term, char **env)
 			input = readline("~~> ");
 		if (input && *input)
 		{
-			init_s(term, input);
+			if (!init_s(term, input))
+			{
+				add_history(term->input);	
+				continue ;
+			}
 			add_history(term->input);
 			execution(term);
 		}
@@ -35,11 +39,6 @@ static void	main_loop(t_term *term, char **env)
 	printf(RESET);
 }
 
-// void	sigint_handler(int signo)
-// {
-// 	(void)signo;
-// }
-
 void	sigquit_handler(int signo)
 {
 	(void)signo;
@@ -48,7 +47,6 @@ void	sigquit_handler(int signo)
 
 int	main(int argc, char **argv, char **envp)
 {
-	// struct sigaction	sa;
 	t_term	term;
 
 	(void)argv;
@@ -56,12 +54,6 @@ int	main(int argc, char **argv, char **envp)
 	ex_stat = 0;
 	if (argc != 1)
 		printf("No arguments allowed\n");
-	// if (signal(SIGINT, sigint_handler) == SIG_ERR)
-	// {
-	// 	perror("");
-	// 	ex_stat = errno;
-	// 	exit(ex_stat);
-	// }
 	if (signal(SIGQUIT, sigquit_handler) == SIG_ERR)
 	{
 		perror("");
