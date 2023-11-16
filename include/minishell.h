@@ -6,7 +6,7 @@
 /*   By: smallem <smallem@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/19 18:05:52 by smallem           #+#    #+#             */
-/*   Updated: 2023/11/16 18:28:57 by smallem          ###   ########.fr       */
+/*   Updated: 2023/11/16 18:47:49 by smallem          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,6 +48,7 @@ typedef struct	s_fetch
 	char	*val;
 	int		start;
 	int		end;
+	int		valid_name;
 }	t_fetch;
 
 typedef struct s_cmd t_cmd;
