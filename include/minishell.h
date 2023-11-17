@@ -6,7 +6,7 @@
 /*   By: smallem <smallem@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/19 18:05:52 by smallem           #+#    #+#             */
-/*   Updated: 2023/11/16 18:47:49 by smallem          ###   ########.fr       */
+/*   Updated: 2023/11/17 15:54:25 by smallem          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,7 +68,7 @@ void 	print_tree(t_tree* root);
 int		init_s(t_term *term, char *input);
 char	**copy_env(char **env, t_term *term);
 char	**splt(char *input, t_term *term);
-char	**splt_space(char *str, char *str_tok, t_term *term);
+char	**splt_space(t_cmd *cmd, char *str, char *str_tok, t_term *term);
 char	**my_split(char *str, t_term *term);
 
 int 	check_input(char *input, t_term *term);
@@ -85,8 +85,20 @@ int		skip_quote(char *str, int i, char c);
 
 int		expand(t_term *term, t_cmd *cmd, char *str);
 int		redirect(t_cmd *cmd, char **mat, t_term *term);
-void	clean(t_term *term);
+void	clean(t_term *term, t_cmd *cmd, char **mat);
 int 	execution(t_term *term);
+
+// void	sigquit_handler(int signo, t_term *term);
+// void	sigint_handler(int signo, t_term *term);
+// void	sigstp_handler(int signo, t_term *term);
+
+// void	ft_export(t_term *term, t_cmd *cmd);
+// void	ft_unset(t_term *term, t_cmd *cmd);
+// void	ft_env(t_term *term, t_cmd *cmd);
+// void	ft_pwd(t_term *term, t_cmd *cmd);
+// void	ft_cd(t_term *term, t_cmd *cmd);
+// void	ft_echo(t_term *term, t_cmd *cmd);
+// void	ft_exit(t_term *term, t_cmd *cmd);
 
 
 #endif

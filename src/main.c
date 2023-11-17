@@ -6,7 +6,7 @@
 /*   By: smallem <smallem@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/19 18:03:00 by smallem           #+#    #+#             */
-/*   Updated: 2023/11/16 18:40:08 by smallem          ###   ########.fr       */
+/*   Updated: 2023/11/17 17:06:19 by smallem          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,12 +39,6 @@ static void	main_loop(t_term *term, char **env)
 	printf(RESET);
 }
 
-void	sigquit_handler(int signo)
-{
-	(void)signo;
-	exit(ex_stat);
-}
-
 int	main(int argc, char **argv, char **envp)
 {
 	t_term	term;
@@ -54,12 +48,24 @@ int	main(int argc, char **argv, char **envp)
 	ex_stat = 0;
 	if (argc != 1)
 		printf("No arguments allowed\n");
-	if (signal(SIGQUIT, sigquit_handler) == SIG_ERR)
-	{
-		perror("");
-		ex_stat = errno;
-		exit(ex_stat);
-	}
+	// if (signal(SIGQUIT, sigquit_handler) == SIG_ERR)
+	// {
+	// 	perror("");
+	// 	ex_stat = errno;
+	// 	exit(ex_stat);
+	// }
+	// if (signal(SIGINT, sigint_handler) == SIG_ERR)
+	// {
+	// 	perror("");
+	// 	ex_stat = errno;
+	// 	exit(ex_stat);
+	// }
+	// if (signal(SIGSTP, sigstp_handler) == SIG_ERR)
+	// {
+	// 	perror("");
+	// 	ex_stat = errno;
+	// 	exit(ex_stat);
+	// }
 	main_loop(&term, envp);	
 	exit(0);
 }

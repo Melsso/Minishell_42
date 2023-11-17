@@ -6,7 +6,7 @@
 /*   By: smallem <smallem@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/16 15:34:44 by smallem           #+#    #+#             */
-/*   Updated: 2023/11/16 18:44:53 by smallem          ###   ########.fr       */
+/*   Updated: 2023/11/17 12:54:08 by smallem          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,11 +50,55 @@ static int	get_fname(char *str, t_term *term, int flag, t_cmd *cmd)
 	if (!check_name(name))
 		return (-1);
 	if (flag == 1)
-		cmd->fd_out = open(name, O_RDWR | O_CREAT | O_TRUNC, 0644);
+	{
+		if (access(name, F_OK) == 0)
+		{
+			if (access(name, W_OK) == 0)
+				cmd->fd_out = open(name, O_WRONLY | O_TRUNC, 0644);
+			else
+			{
+				printf("%s: Permission denied\n", name);
+				return (-1);
+			}
+		}
+		else
+			cmd->fd_out = open(name, O_WRONLY | O_CREAT | O_TRUNC, 0644);
+	}
 	else if (flag == 2)
-		cmd->fd_in = open(name, O_RDONLY);
+	{
+		if (access(name, F_OK) == 0)
+		{
+			if (access(name, R_OK) == 0)
+				cmd->fd_in = open(name, O_RDONLY);
+			else
+			{
+				printf("%s: Permission denied\n", name);
+				return (-1);
+			}
+		}
+		else
+		{
+			printf("%s: No such file or directory\n", name);
+			return (-1);
+		}
+	}
 	else if (flag == 3)
-		cmd->fd_out = open(name, O_RDWR | O_CREAT | O_APPEND, 0644);
+	{
+		if (access(name, F_OK) == 0)
+		{
+			if (access(name, W_OK) == 0)
+				cmd->fd_out = open(name, O_WRONLY | O_APPEND, 0644);
+			else
+			{
+				printf("%s: Permission denied\n", name);
+				return (-1);
+			}
+		}
+		else
+			cmd->fd_out = open(name, O_WRONLY | O_CREAT, 0644);		
+	}
+	if (cmd->fd_in < 0 || cmd->fd_out < 0)
+		printf("%s: No such file or directory\n", name);
 	return (i);
 }
 

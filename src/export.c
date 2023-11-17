@@ -6,92 +6,72 @@
 /*   By: smallem <smallem@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/10 12:24:27 by smallem           #+#    #+#             */
-/*   Updated: 2023/09/10 14:45:56 by smallem          ###   ########.fr       */
+/*   Updated: 2023/11/17 15:50:48 by smallem          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
 
-static int	check_arg(char *arg)
-{
-	size_t	i;
 
-	i = 0;
-	while (arg[i])
-	{
-		if (arg[i + 1] && arg[i + 1] == '=')
-			return (1);
-		i++;
-	}
-	return (0);
-}
-static	size_t	check_present(char *arg, t_term *term)
+static void	update_ev(t_term *term, char *arg)
 {
-	size_t	i;
-	size_t	len;
+	int	i;
+	char	*line;
+	char	**new_ev;
+	char	**name;
 
 	i = 0;
 	while (arg[i])
 	{
 		if (arg[i] == '=')
 			break ;
-		i++;
+		else
+			i++;
 	}
-	len = 0;
-	while (term->env[len])
+	if (!arg[i])
+		line = ft_strjoin(arg, "=", term);
+	else
+		line = ft_strdup(arg, term);
+	name = ft_split(line, '=', term);
+	i = 0;
+	while (term->env[i])
 	{
-		if (!ft_strncmp(term->env[len], arg, i - 1))
-			return (len);
-		len++;
-	}
-	return (0);
-}
-
-static void	update_ev(t_term *term, char *arg)
-{
-	size_t	len;
-	char	**new_ev;
-
-	if (!check_arg(arg))
-	{
-		// prolly change exit status;
-		return ;
-	}
-	len = check_present(arg, term);
-	if (!len)
-	{
-		while (term->env[len])
-			len++;
-		new_ev = (char **)my_malloc(&term->mem_lst, sizeof(char *) * (len + 1));
-		if (!new_ev)
+		if (!ft_strncmp(term->env[i], name[0], ft_strlen(name[0])))
 		{
-			//malloc erorr
+			term->env[i] = line;
+			break ;
 		}
-		len = 0;
-		while (term->env[len])
-			new_ev[len] = ft_strdup(term->env[len++], term);
-		new_ev[len++] = ft_strdup(arg, term);
-		new_ev[len] = NULL;
+		else
+			i++;
+	}
+	if (!term->env[i])
+	{
+		new_ev = (char **)my_malloc(&term->mem_lst, (i + 1) * sizeof(char *));
+		i = 0;
+		while (term->env[i])
+		{
+			new_ev[i] = ft_strdup(term->env[i], term);
+			i++;
+		}
+		new_ev[i++] = ft_strdup(line);
+		new_ev[i] = NULL;
 		term->env = new_ev;
 	}
-	else
-		term->env[len] = ft_strdup(arg, term);
 }
 
-void	ft_export(t_term *term)
+void	ft_export(t_term *term, t_cmd *cmd)
 {
-	char	**cmd;
-	size_t	len;
+	int	len;
 
 	len = 0;
-	while (cmd[len])
+	while (cmd->args[len])
 		len++;
 	if (len == 1)
 		ft_env(term);
 	else
 	{
 		len = 0;
-		while (cmd[len])
+		while (cmd->args[len])
 		{
 			update_ev(term, cmd[len]);
 			len++;

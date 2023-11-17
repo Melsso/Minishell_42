@@ -6,7 +6,7 @@
 /*   By: smallem <smallem@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/25 20:56:41 by smallem           #+#    #+#             */
-/*   Updated: 2023/11/16 18:30:42 by smallem          ###   ########.fr       */
+/*   Updated: 2023/11/17 14:10:50 by smallem          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,7 @@ char	*get_path(t_term *term, char *cmd)
 	while (ppath[++i])
 	{
 		line = ft_strjoin(ft_strjoin(ppath[i], "/", term), cmd, term);
-		if (access(line, X_OK | F_OK) == 0)
+		if (access(line, F_OK) == 0 && access(line, X_OK) == 0)
 			return (line);
 	}
 	return (NULL);
@@ -88,7 +88,6 @@ t_cmd	*build_cmd(t_term *term, t_tree **node, int *ind)
 	t_cmd	*cmd;
 	char	*str;
 	int		i;
-	int		j;
 
 	cmd = (t_cmd *)my_malloc(&term->mem_lst, sizeof(t_cmd));
 	if ((*node)->content)

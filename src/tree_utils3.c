@@ -6,7 +6,7 @@
 /*   By: smallem <smallem@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/07 16:42:21 by smallem           #+#    #+#             */
-/*   Updated: 2023/11/16 13:29:02 by smallem          ###   ########.fr       */
+/*   Updated: 2023/11/17 14:24:15 by smallem          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,6 +56,18 @@ char	**splt(char *str, t_term *term)
 	return (mat);
 }
 
+static int	skip_q(char *str, int i, char c, char *str_tok)
+{
+	while (str[i])
+	{
+		if (str[i] != c || (str[i] == c && str_tok[i] == c))
+			i++;
+		else if (str[i] == c && str_tok[i] != c)
+			return (i);
+	}
+	return (-1);
+}
+
 static int	m_size(char *str, char *str_tok)
 {
 	int	i;
@@ -72,54 +84,44 @@ static int	m_size(char *str, char *str_tok)
 				size++;
 		}
 		else if ((str[i] == TK_SQUOTE || str[i] == TK_DQUOTE) && str_tok[i] == '0')
-			i = skip_quote(str, i + 1, str[i]) + 1;
+			i = skip_q(str, i + 1, str[i], str_tok) + 1;
 		else
 			i++;
 	}
 	return (size);
 }
-static int	skip_q(char *str, int i, char c, char *str_tok)
-{
-	while (str[i])
-	{
-		if (str[i] != c || (str[i] == c && str_tok[i] == c))
-			i++;
-		else if (str[i] == c && str_tok[i] != c)
-			return (i);
-	}
-	return (-1);
-}
 
-char	**splt_space(char *str, char *str_tok, t_term *term)
+char	**splt_space(t_cmd *cmd, char *str, char *str_tok, t_term *term)
 {
 	char	**mat;
-	char	*tmp;
 	int		i;
 	int		j;
 	int		k;
 
+	cmd->args = (char **)my_malloc(&term->mem_lst, sizeof(char *) * (m_size(str, str_tok) + 1));
 	mat = (char **)my_malloc(&term->mem_lst, sizeof(char *) * (m_size(str, str_tok) + 1));
 	i = 0;
 	j = 0;
 	k = 0;
-	tmp = str;
-	while (tmp[j])
+	while (str[j])
 	{
-		while (tmp[j] == TK_SPACE || tmp[j] == TK_TAB)
+		while (str[j] == TK_SPACE || str[j] == TK_TAB)
 			j++;
 		k = j;
-		while (tmp[j] && tmp[j] != TK_SPACE && tmp[j] != TK_TAB)
+		while (str[j] && str[j] != TK_SPACE && str[j] != TK_TAB)
 		{
-			if ((tmp[j] == TK_SQUOTE || tmp[j] == TK_DQUOTE) && str_tok[j] == '0')
-				j += skip_q(&tmp[j], 1, tmp[j], &str_tok[j]);
+			if ((str[j] == TK_SQUOTE || str[j] == TK_DQUOTE) && str_tok[j] == '0')
+				j += skip_q(&str[j], 1, str[j], &str_tok[j]);
 			j++;
 		}
-		if (tmp[j] == TK_SPACE || tmp[j] == TK_TAB || j > k)
+		if (str[j] == TK_SPACE || str[j] == TK_TAB || j > k)
 		{
-			mat[i++] = ft_substr(&str[k], 0, &tmp[j] - &str[k], term);
+			cmd->args[i] = ft_substr(&str[k], 0, &str[j] - &str[k], term);
+			mat[i++] = ft_substr(&str_tok[k], 0, &str_tok[j] - &str_tok[k], term);
 			k = j;
 		}
 	}
+	cmd->args[i] = NULL;
 	mat[i] = NULL;
 	return (mat);
 }
