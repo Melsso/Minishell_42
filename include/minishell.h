@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: smallem <smallem@student.42.fr>            +#+  +:+       +#+        */
+/*   By: khnishou <khnishou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/19 18:05:52 by smallem           #+#    #+#             */
-/*   Updated: 2023/11/19 15:08:48 by smallem          ###   ########.fr       */
+/*   Updated: 2023/11/19 17:13:22 by khnishou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,7 @@
 #include <errno.h>
 #include <signal.h>
 #include <termios.h>
+#include <sys/wait.h>
 
 #define GREEN "\x1b[32m"
 #define RESET "\x1b[0m"
@@ -62,7 +63,7 @@ typedef struct s_cmd
 	char	*path;
 }	t_cmd;
 
-int	ex_stat;
+extern int ex_stat;
 
 void 	print_tree(t_tree* root);
 int		init_s(t_term *term, char *input);

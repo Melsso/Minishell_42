@@ -3,14 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: smallem <smallem@student.42.fr>            +#+  +:+       +#+        */
+/*   By: khnishou <khnishou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/19 18:03:00 by smallem           #+#    #+#             */
-/*   Updated: 2023/11/17 17:06:19 by smallem          ###   ########.fr       */
+/*   Updated: 2023/11/19 17:12:32 by khnishou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
+
+int ex_stat = 0;
 
 static void	main_loop(t_term *term, char **env)
 {

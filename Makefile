@@ -25,7 +25,7 @@ SRC		:=	main.c \
 SRCS = $(addprefix $(SRC_DIR), $(SRC))
 OBJ	= $(SRC:.c=.o)
 OBJS = $(addprefix $(OBJ_DIR), $(OBJ))
-HEADER = -I ./include -I ../LeakSanitizer
+HEADER = -I ./include
 LIBFT = ./libs/libft/libft.a
 
 all: $(OBJ_DIR) $(NAME)
@@ -38,7 +38,7 @@ $(OBJ_DIR):
 
 $(NAME): $(OBJS)
 	cd libs/libft && make
-	$(CC) $(CFLAGS) $(OBJS) $(LIBFT) -lreadline -o $(NAME)
+	$(CC) $(CFLAGS) $(OBJS) $(LIBFT) -lreadline $(HEADER) -o $(NAME)
 	clear
 
 clean:
