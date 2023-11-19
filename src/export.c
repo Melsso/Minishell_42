@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   export.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: smallem <smallem@student.42.fr>            +#+  +:+       +#+        */
+/*   By: khnishou <khnishou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/10 12:24:27 by smallem           #+#    #+#             */
-/*   Updated: 2023/11/19 15:01:53 by smallem          ###   ########.fr       */
+/*   Updated: 2023/11/19 17:50:36 by khnishou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 
 static void	update_ev(t_term *term, char *arg)
 {
-	int	i;
+	int		i;
 	char	*line;
 	char	**new_ev;
 	char	**name;
@@ -70,7 +70,7 @@ void	ft_export(t_term *term, t_cmd *cmd)
 		ft_env(term, cmd);
 	else
 	{
-		len = 0;
+		len = 1;
 		while (cmd->args[len])
 		{
 			update_ev(term, cmd->args[len]);
