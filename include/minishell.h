@@ -6,7 +6,7 @@
 /*   By: smallem <smallem@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/19 18:05:52 by smallem           #+#    #+#             */
-/*   Updated: 2023/11/17 15:54:25 by smallem          ###   ########.fr       */
+/*   Updated: 2023/11/19 15:08:48 by smallem          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,13 +92,13 @@ int 	execution(t_term *term);
 // void	sigint_handler(int signo, t_term *term);
 // void	sigstp_handler(int signo, t_term *term);
 
-// void	ft_export(t_term *term, t_cmd *cmd);
-// void	ft_unset(t_term *term, t_cmd *cmd);
-// void	ft_env(t_term *term, t_cmd *cmd);
-// void	ft_pwd(t_term *term, t_cmd *cmd);
-// void	ft_cd(t_term *term, t_cmd *cmd);
-// void	ft_echo(t_term *term, t_cmd *cmd);
-// void	ft_exit(t_term *term, t_cmd *cmd);
+void	ft_export(t_term *term, t_cmd *cmd);
+void	ft_unset(t_term *term, t_cmd *cmd);
+void	ft_env(t_term *term, t_cmd *cmd);
+void	ft_pwd(t_term *term, t_cmd *cmd);
+void	ft_cd(t_term *term, t_cmd *cmd);
+void	ft_echo(t_term *term, t_cmd *cmd);
+void	ft_exit(t_term *term, t_cmd *cmd);
 
 
 #endif

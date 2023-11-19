@@ -6,7 +6,7 @@
 /*   By: smallem <smallem@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/17 16:00:51 by smallem           #+#    #+#             */
-/*   Updated: 2023/11/17 16:55:00 by smallem          ###   ########.fr       */
+/*   Updated: 2023/11/19 15:11:32 by smallem          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ void	ft_cd(t_term *term, t_cmd *cmd)
 		{
 			if (!ft_strncmp(term->env[len], "HOME=", ft_strlen("HOME=")))
 			{
-				path = ft_strdup(term->env[len][5], term);
+				path = ft_strdup(&term->env[len][5], term);
 				break ;
 			}
 			len++;
@@ -48,7 +48,7 @@ void	ft_cd(t_term *term, t_cmd *cmd)
 	{
 		if (chdir(cmd->args[1]) == -1)
 		{
-			printf("cd: %s: No such file or directory\n", cmd[1]);
+			printf("cd: %s: No such file or directory\n", cmd->args[1]);
 			ex_stat = 1;
 			return ;
 		}

@@ -16,6 +16,11 @@ SRC		:=	main.c \
 			tree_utils.c \
 			tree_utils2.c \
 			tree_utils3.c \
+			export.c \
+			unset.c \
+			cd.c \
+			echo.c \
+			builtins.c \
 
 SRCS = $(addprefix $(SRC_DIR), $(SRC))
 OBJ	= $(SRC:.c=.o)

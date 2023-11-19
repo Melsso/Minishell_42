@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   builtins3.c                                        :+:      :+:    :+:   */
+/*   export.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: smallem <smallem@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/10 12:24:27 by smallem           #+#    #+#             */
-/*   Updated: 2023/11/17 15:50:48 by smallem          ###   ########.fr       */
+/*   Updated: 2023/11/19 15:01:53 by smallem          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,7 +53,7 @@ static void	update_ev(t_term *term, char *arg)
 			new_ev[i] = ft_strdup(term->env[i], term);
 			i++;
 		}
-		new_ev[i++] = ft_strdup(line);
+		new_ev[i++] = ft_strdup(line, term);
 		new_ev[i] = NULL;
 		term->env = new_ev;
 	}
@@ -67,13 +67,13 @@ void	ft_export(t_term *term, t_cmd *cmd)
 	while (cmd->args[len])
 		len++;
 	if (len == 1)
-		ft_env(term);
+		ft_env(term, cmd);
 	else
 	{
 		len = 0;
 		while (cmd->args[len])
 		{
-			update_ev(term, cmd[len]);
+			update_ev(term, cmd->args[len]);
 			len++;
 		}
 	}

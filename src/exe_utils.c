@@ -6,7 +6,7 @@
 /*   By: smallem <smallem@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/22 11:58:39 by smallem           #+#    #+#             */
-/*   Updated: 2023/11/17 13:04:12 by smallem          ###   ########.fr       */
+/*   Updated: 2023/11/19 15:12:00 by smallem          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,6 +58,49 @@ static void	check_cmd(t_cmd *cmd, t_term *term)
 		printf("%s: Permission denied\n", cmd->args[0]);
 }
 
+static void	exe_builtins(t_cmd *cmd, t_term *term)
+{
+	if (!ft_strncmp(cmd->args[0], "export", ft_strlen(cmd->args[0]))
+		&& !ft_strncmp(cmd->args[0], "export", ft_strlen("export")))
+		{
+			ft_export(term, cmd);
+			exit(ex_stat);
+		}
+	else if (!ft_strncmp(cmd->args[0], "env", ft_strlen(cmd->args[0]))
+		&& !ft_strncmp(cmd->args[0], "env", ft_strlen("env")))
+	{
+		ft_env(term, cmd);
+		exit(ex_stat);
+	}
+	else if (!ft_strncmp(cmd->args[0], "echo", ft_strlen(cmd->args[0]))
+		&& !ft_strncmp(cmd->args[0], "echo", ft_strlen("echo")))
+	{
+		ft_echo(term, cmd);
+		exit(ex_stat);
+	}
+	else if (!ft_strncmp(cmd->args[0], "unset", ft_strlen(cmd->args[0]))
+		&& !ft_strncmp(cmd->args[0], "unset", ft_strlen("unset")))
+	{
+		ft_unset(term, cmd);
+		exit(ex_stat);
+	}
+	else if (!ft_strncmp(cmd->args[0], "cd", ft_strlen(cmd->args[0]))
+		&& !ft_strncmp(cmd->args[0], "cd", ft_strlen("cd")))
+	{
+		ft_cd(term, cmd);
+		exit(ex_stat);
+	}
+	else if (!ft_strncmp(cmd->args[0], "pwd", ft_strlen(cmd->args[0]))
+		&& !ft_strncmp(cmd->args[0], "pwd", ft_strlen("pwd")))
+	{
+		ft_pwd(term, cmd);
+		exit(ex_stat);
+	}
+	else if (!ft_strncmp(cmd->args[0], "exit", ft_strlen(cmd->args[0]))
+		&& !ft_strncmp(cmd->args[0], "exit", ft_strlen("exit")))
+		ft_exit(term, cmd);
+}
+
 int exec_cmd(t_cmd *cmd, int tmp, t_term *term)
 {
 	dup2(tmp, STDIN_FILENO);
@@ -72,14 +115,14 @@ int exec_cmd(t_cmd *cmd, int tmp, t_term *term)
 		dup2(cmd->fd_out, STDOUT_FILENO);
 		close(cmd->fd_out);
 	}
+	exe_builtins(cmd, term);
 	check_cmd(cmd, term);
 	if (execve(cmd->path, cmd->args, term->env) == -1)
 	{
 		ex_stat = errno;
 		exit(errno);
-	}
+	}	
 	return (1);
-	// error
 }
 
 int exec_tree(t_term *term, t_tree *tree, int *tmp, int *fd)
@@ -126,78 +169,6 @@ int exec_tree(t_term *term, t_tree *tree, int *tmp, int *fd)
 	}
 	return (0);
 }
-
-// static void	fix_args(t_cmd *cmd, t_term *term)
-// {
-// 	int		size;
-// 	int		i;
-// 	char	**args;
-
-// 	i = 0;
-// 	size = 0;
-// 	while (cmd->args[i])
-// 	{
-// 		if ((!ft_strncmp(cmd->args[i], ">", ft_strlen(cmd->args[i]))
-// 		|| !ft_strncmp(cmd->args[i], ">>", ft_strlen(cmd->args[i]))
-// 		|| !ft_strncmp(cmd->args[i], "<", ft_strlen(cmd->args[i]))
-// 		|| !ft_strncmp(cmd->args[i], "<<", ft_strlen(cmd->args[i]))) && cmd->red[i])
-// 			size++;
-// 		i++;
-// 	}
-	
-// 	if (!size)
-// 		return ;
-// 	args = (char **)my_malloc(&term->mem_lst, sizeof(char *) * (i - (size * 2)));
-// 	size = 0;
-// 	i = 0;
-// 	while (cmd->args[i])
-// 	{
-// 		if ((!ft_strncmp(cmd->args[i], ">", ft_strlen(cmd->args[i]))
-// 		|| !ft_strncmp(cmd->args[i], ">>", ft_strlen(cmd->args[i]))
-// 		|| !ft_strncmp(cmd->args[i], "<", ft_strlen(cmd->args[i]))
-// 		|| !ft_strncmp(cmd->args[i], "<<", ft_strlen(cmd->args[i]))) && cmd->red[i])
-// 			i += 2;
-// 		else
-// 		{
-// 			args[size] = ft_strdup(cmd->args[i], term);
-// 			i++;
-// 			size++;
-// 		}
-// 	}
-// 	args[size] = NULL;
-// 	cmd->args = args;
-// }
-
-// static void	open_file(t_cmd *cmd)
-// {
-// 	int	i;
-
-// 	i = -1;
-// 	while (cmd->args[++i])
-// 	{
-// 		if ((!ft_strncmp(cmd->args[i], ">", ft_strlen(cmd->args[i])) || !ft_strncmp(cmd->args[i], ">>", ft_strlen(cmd->args[i]))) && cmd->red[i])
-// 		{
-// 			if (!ft_strncmp(cmd->args[i], ">", ft_strlen(cmd->args[i])))
-// 				cmd->fd_out = open(cmd->args[i + 1], O_CREAT | O_TRUNC | O_WRONLY, 0644);
-// 			else
-// 				cmd->fd_out = open(cmd->args[i + 1], O_CREAT | O_APPEND | O_WRONLY, 0644);
-// 			if (cmd->fd_out < 0)
-// 			{
-// 				printf("%s: no such file or directory\n", cmd->args[i + 1]);
-// 				ex_stat = errno;
-// 			}
-// 		}
-// 		else if (!ft_strncmp(cmd->args[i], "<", ft_strlen(cmd->args[i])) && cmd->red[i])
-// 		{
-// 			cmd->fd_in = open(cmd->args[i + 1], O_RDONLY);
-// 			if (cmd->fd_in < 0)
-// 			{
-// 				printf("%s: no such file or directory\n", cmd->args[i + 1]);
-// 				ex_stat = errno;
-// 			}
-// 		}
-// 	}
-// }
 
 int execution(t_term *term)
 {
