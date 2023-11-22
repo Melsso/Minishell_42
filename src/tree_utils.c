@@ -6,7 +6,7 @@
 /*   By: smallem <smallem@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/22 11:58:18 by smallem           #+#    #+#             */
-/*   Updated: 2023/11/16 18:30:56 by smallem          ###   ########.fr       */
+/*   Updated: 2023/11/22 18:56:14 by smallem          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,7 @@ static void	create_tree(ssize_t nb_pipes, t_tree **root, t_term *term)
 				tmp->r = curr;
 				tmp = tmp->r;
 			}
-		}	
+		}
 		tmp->r = create_node(TK_CMD, NULL, term);
 	}
 }
@@ -101,7 +101,7 @@ static void	update_tree(t_term *term, t_tree **root, int *i)
 
 int	init_s(t_term *term, char *input)
 {
-	int	i;
+	int		i;
 	t_tree	*root;
 
 	i = 0;
@@ -114,7 +114,8 @@ int	init_s(t_term *term, char *input)
 	term->nb_pipes = count_pipes(term);
 	if (term->nb_pipes)
 		pipe(term->fd);
-	term->pids = (pid_t *)my_malloc(&term->mem_lst, sizeof(pid_t) * (term->nb_pipes + 1));
+	term->pids = (pid_t *)my_malloc(&term->mem_lst, sizeof(pid_t)
+			* (term->nb_pipes + 1));
 	create_tree(term->nb_pipes, &root, term);
 	populate_tree(&root, term);
 	term->ast = root;

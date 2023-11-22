@@ -6,7 +6,7 @@
 /*   By: smallem <smallem@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/10 12:24:36 by smallem           #+#    #+#             */
-/*   Updated: 2023/11/17 17:28:19 by smallem          ###   ########.fr       */
+/*   Updated: 2023/11/22 15:28:52 by smallem          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,13 +38,16 @@ void	ft_echo(t_term *term, t_cmd *cmd)
 	}
 	while (cmd->args[start])
 	{
-		printf("%s", cmd->args[start]);
+		// printf("%s", cmd->args[start]);
+		ft_putstr_fd(cmd->args[start], cmd->fd_out);
 		start++;
 		if (cmd->args[start])
-			printf(" ");
+			ft_putstr_fd(" ", cmd->fd_out);
+			// printf(" ");
 	}
 	if (nl_flag)
-		printf("\n");
+		ft_putstr_fd("\n", cmd->fd_out);
+		// printf("\n");
 	ex_stat = 0;
 	return ;
 }

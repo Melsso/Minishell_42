@@ -11,6 +11,7 @@ SRC		:=	main.c \
 			exe_utils.c \
 			expand.c \
 			redirection.c \
+			redirection_utils.c \
 			clean.c \
 			my_malloc.c \
 			tree_utils.c \
@@ -39,7 +40,6 @@ $(OBJ_DIR):
 $(NAME): $(OBJS)
 	cd libs/libft && make
 	$(CC) $(CFLAGS) $(OBJS) $(LIBFT) -lreadline $(HEADER) -o $(NAME)
-	clear
 
 clean:
 	cd libs/libft && make clean

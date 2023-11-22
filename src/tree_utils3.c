@@ -6,7 +6,7 @@
 /*   By: smallem <smallem@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/07 16:42:21 by smallem           #+#    #+#             */
-/*   Updated: 2023/11/17 14:24:15 by smallem          ###   ########.fr       */
+/*   Updated: 2023/11/22 19:16:31 by smallem          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,33 +91,46 @@ static int	m_size(char *str, char *str_tok)
 	return (size);
 }
 
-char	**splt_space(t_cmd *cmd, char *str, char *str_tok, t_term *term)
+// static char	**prep_split(t_cmd *cmd, char *s, char *s_t, t_term *term)
+// {
+// 	char	**mat;
+// 	cmd->args = (char **)my_malloc(&term->mem_lst, sizeof(char *)
+// 		* (m_size(s, s_t) + 1)); 
+// 	mat = (char **)my_malloc(&term->mem_lst, sizeof(char *)
+// 		* (m_size(s, s_t) + 1));
+// 	return (mat);
+// }
+
+char	**splt_space(t_cmd *cmd, char *s, char *s_t, t_term *term)
 {
 	char	**mat;
 	int		i;
 	int		j;
 	int		k;
 
-	cmd->args = (char **)my_malloc(&term->mem_lst, sizeof(char *) * (m_size(str, str_tok) + 1));
-	mat = (char **)my_malloc(&term->mem_lst, sizeof(char *) * (m_size(str, str_tok) + 1));
+	cmd->args = (char **)my_malloc(&term->mem_lst, sizeof(char *)
+		* (m_size(s, s_t) + 1));
+	mat = (char **)my_malloc(&term->mem_lst, sizeof(char *)
+		* (m_size(s, s_t) + 1));
+	// mat = prep_split(cmd, s, s_t, term);
 	i = 0;
 	j = 0;
 	k = 0;
-	while (str[j])
+	while (s[j])
 	{
-		while (str[j] == TK_SPACE || str[j] == TK_TAB)
+		while (s[j] == TK_SPACE || s[j] == TK_TAB)
 			j++;
 		k = j;
-		while (str[j] && str[j] != TK_SPACE && str[j] != TK_TAB)
+		while (s[j] && s[j] != TK_SPACE && s[j] != TK_TAB)
 		{
-			if ((str[j] == TK_SQUOTE || str[j] == TK_DQUOTE) && str_tok[j] == '0')
-				j += skip_q(&str[j], 1, str[j], &str_tok[j]);
+			if ((s[j] == TK_SQUOTE || s[j] == TK_DQUOTE) && s_t[j] == '0')
+				j += skip_q(&s[j], 1, s[j], &s_t[j]);
 			j++;
 		}
-		if (str[j] == TK_SPACE || str[j] == TK_TAB || j > k)
+		if (s[j] == TK_SPACE || s[j] == TK_TAB || j > k)
 		{
-			cmd->args[i] = ft_substr(&str[k], 0, &str[j] - &str[k], term);
-			mat[i++] = ft_substr(&str_tok[k], 0, &str_tok[j] - &str_tok[k], term);
+			cmd->args[i] = ft_substr(&s[k], 0, &s[j] - &s[k], term);
+			mat[i++] = ft_substr(&s_t[k], 0, &s_t[j] - &s_t[k], term);
 			k = j;
 		}
 	}

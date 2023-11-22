@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exe_utils.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: khnishou <khnishou@student.42.fr>          +#+  +:+       +#+        */
+/*   By: smallem <smallem@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/22 11:58:39 by smallem           #+#    #+#             */
-/*   Updated: 2023/11/19 17:43:02 by khnishou         ###   ########.fr       */
+/*   Updated: 2023/11/22 18:44:50 by smallem          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,7 +58,7 @@ static void	check_cmd(t_cmd *cmd, t_term *term)
 		printf("%s: Permission denied\n", cmd->args[0]);
 }
 
-static int	is_buildin(t_cmd *cmd)
+static int	is_builtin(t_cmd *cmd)
 {
 	if (!ft_strncmp(cmd->args[0], "export", ft_strlen(cmd->args[0]))
 		&& !ft_strncmp(cmd->args[0], "export", ft_strlen("export")))
@@ -107,7 +107,7 @@ static void	exe_builtins(t_cmd *cmd, t_term *term, int flag)
 	else if (!ft_strncmp(cmd->args[0], "exit", ft_strlen(cmd->args[0]))
 		&& !ft_strncmp(cmd->args[0], "exit", ft_strlen("exit")))
 		ft_exit(term, cmd);
-	if (flag && is_buildin(cmd))
+	if (flag && is_builtin(cmd))
 		exit(ex_stat);
 	return ;
 }
@@ -151,7 +151,7 @@ int exec_tree(t_term *term, t_tree *tree, int *tmp, int *fd)
 		cmd = (t_cmd *) tree->content;
 		if (cmd->index == term->nb_pipes) // check
 		{
-			if (is_buildin(cmd))
+			if (is_builtin(cmd))
 				exe_builtins(cmd, term, 0);
 			else
 			{
@@ -194,7 +194,7 @@ int execution(t_term *term)
 
 	tmp = dup(STDIN_FILENO);
 	if (!term->ast)
-		return 1;
+		return (1);
 	exec_tree(term, term->ast, &tmp, fd);
 	close(tmp);
 	return (0);

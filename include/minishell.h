@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: khnishou <khnishou@student.42.fr>          +#+  +:+       +#+        */
+/*   By: smallem <smallem@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/19 18:05:52 by smallem           #+#    #+#             */
-/*   Updated: 2023/11/19 17:13:22 by khnishou         ###   ########.fr       */
+/*   Updated: 2023/11/22 17:14:59 by smallem          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,7 +63,7 @@ typedef struct s_cmd
 	char	*path;
 }	t_cmd;
 
-extern int ex_stat;
+int ex_stat;
 
 void 	print_tree(t_tree* root);
 int		init_s(t_term *term, char *input);
@@ -85,7 +85,12 @@ int		skip_quote(char *str, int i, char c);
 
 
 int		expand(t_term *term, t_cmd *cmd, char *str);
+
 int		redirect(t_cmd *cmd, char **mat, t_term *term);
+int		open_outfiles(int flag, char *name, t_cmd *cmd);
+int		open_infiles(int flag, char *name, t_cmd *cmd);
+
+
 void	clean(t_term *term, t_cmd *cmd, char **mat);
 int 	execution(t_term *term);
 

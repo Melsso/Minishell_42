@@ -6,7 +6,7 @@
 /*   By: smallem <smallem@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/25 20:56:41 by smallem           #+#    #+#             */
-/*   Updated: 2023/11/17 14:10:50 by smallem          ###   ########.fr       */
+/*   Updated: 2023/11/22 18:51:08 by smallem          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ char	**copy_env(char **env, t_term *term)
 	len = 0;
 	while (env[len])
 		len++;
-	new_ev = (char **)my_malloc(&term->mem_lst, sizeof(char *) * (len + 1));	
+	new_ev = (char **)my_malloc(&term->mem_lst, sizeof(char *) * (len + 1));
 	len = -1;
 	while (env[++len])
 		new_ev[len] = ft_strdup(env[len], term);
@@ -30,7 +30,7 @@ char	**copy_env(char **env, t_term *term)
 
 char	*get_path(t_term *term, char *cmd)
 {
-	int	i;
+	int		i;
 	char	*path;
 	char	*line;
 	char	**ppath;
