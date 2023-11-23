@@ -6,7 +6,7 @@
 /*   By: smallem <smallem@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/23 18:54:27 by smallem           #+#    #+#             */
-/*   Updated: 2023/11/16 18:20:15 by smallem          ###   ########.fr       */
+/*   Updated: 2023/11/23 17:00:54 by smallem          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,14 +54,17 @@ static int	check_syntax(t_term *term)
 
 	i = skip_spaces(term->input, 0);
 	if (term->input[i] == TK_PIPE || term->input[i] == '&')
-		return (printf("syntax error near unexpected token '%c'\n", term->input[i]), 0);
+		return (printf("syntax error near unexpected token '%c'\n",
+				term->input[i]), 0);
 	else if (!ft_strncmp(&term->input[i], "<<", ft_strlen("<<"))
-		|| !ft_strncmp(&term->input[i], ">>", ft_strlen(">>")) || term->input[i] == TK_GREATER
+		|| !ft_strncmp(&term->input[i], ">>", ft_strlen(">>"))
+		|| term->input[i] == TK_GREATER
 		|| term->input[i] == TK_LESS)
 	{
 		i = skip_spaces(term->input, i + 1);
 		if (!term->input[i])
-			return (printf("syntax error near unexpected token 'newline'\n"), 0);
+			return (printf("syntax error near unexpected token 'newline'\n"),
+				0);
 	}
 	return (1);
 }
@@ -74,4 +77,14 @@ int	check_input(char *input, t_term *term)
 		return (0);
 	read_more(0, term);
 	return (check_syntax(term));
+}
+
+int	skip_quote(char *str, int i, char c)
+{
+	while (str[i] && str[i] != c)
+		i++;
+	if (str[i] == c)
+		return (i);
+	else
+		return (-1);
 }

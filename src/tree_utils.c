@@ -6,56 +6,33 @@
 /*   By: smallem <smallem@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/22 11:58:18 by smallem           #+#    #+#             */
-/*   Updated: 2023/11/22 18:56:14 by smallem          ###   ########.fr       */
+/*   Updated: 2023/11/23 17:04:25 by smallem          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
 
-static t_tree	*create_node(enum e_token type, void *content, t_term *term)
+t_cmd	*build_cmd(t_term *term, t_tree **node, int *ind)
 {
-	t_tree	*node;
+	t_cmd	*cmd;
+	char	*str;
+	int		i;
 
-	node = (t_tree *)my_malloc(&term->mem_lst, sizeof(t_tree));
-	node->type = type;
-	node->content = content;
-	node->r = NULL;
-	node->l = NULL;
-	return (node);
+	cmd = (t_cmd *)my_malloc(&term->mem_lst, sizeof(t_cmd));
+	if ((*node)->content)
+	{
+		str = (char *)(*node)->content;
+		cmd->fd_in = 0;
+		cmd->fd_out = 1;
+		cmd->index = *ind;
+		if (!expand(term, cmd, str))
+			return (NULL);
+		return (cmd);
+	}
+	return (NULL);
 }
 
-static void	create_tree(ssize_t nb_pipes, t_tree **root, t_term *term)
-{
-	t_tree	*curr;
-	t_tree	*tmp;
-
-	if (!nb_pipes)
-	{
-		curr = create_node(TK_CMD, NULL, term);
-		*root = curr;
-	}
-	else
-	{
-		while (nb_pipes--)
-		{
-			curr = create_node(TK_PL, NULL, term);
-			curr->l = create_node(TK_CMD, NULL, term);
-			if (!(*root))
-			{
-				*root = curr;
-				tmp = *root;
-			}
-			else
-			{
-				tmp->r = curr;
-				tmp = tmp->r;
-			}
-		}
-		tmp->r = create_node(TK_CMD, NULL, term);
-	}
-}
-
-static void	populate_tree(t_tree **root, t_term *term)
+void	populate_tree(t_tree **root, t_term *term)
 {
 	t_tree	*tmp;
 	ssize_t	i;
@@ -77,7 +54,7 @@ static void	populate_tree(t_tree **root, t_term *term)
 	}
 }
 
-static void	update_tree(t_term *term, t_tree **root, int *i)
+void	update_tree(t_term *term, t_tree **root, int *i)
 {
 	if (*root)
 	{

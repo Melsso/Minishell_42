@@ -6,7 +6,7 @@
 /*   By: smallem <smallem@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/09 17:32:00 by smallem           #+#    #+#             */
-/*   Updated: 2023/11/17 14:24:21 by smallem          ###   ########.fr       */
+/*   Updated: 2023/11/23 16:50:28 by smallem          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,43 +38,7 @@ char	*fetch_line(char *to_find, t_term *term)
 	return (ft_strdup("", term));
 }
 
-static t_fetch	*fill_fetch(char *str, t_term *term, int len)
-{
-	t_fetch	*to_fetch;
-	int		i;
-	int		k;
-	int		j;
-
-	if (!len)
-		return (NULL);
-	to_fetch = (t_fetch *)my_malloc(&term->mem_lst, sizeof(t_fetch) * (len));
-	i = 0;
-	k = 0;
-	while (str[i])
-	{
-		if (str[i] == TK_SQUOTE)
-			i = skip_quote(&str[i], i, TK_SQUOTE);
-		else if (str[i] == TK_DOLLAR)
-		{
-			j = i + 1;
-			while (str[j] && str[j] != TK_SPACE && str[j] != TK_DOLLAR && str[j] != TK_DQUOTE)
-				j++;
-			to_fetch[k].name = ft_substr(str, i, j - i, term);
-			to_fetch[k].start = i;
-			if (ft_strlen(to_fetch[k].name) == 1)
-				to_fetch[k].val = ft_strdup("$", term);
-			else
-				to_fetch[k].val = fetch_line(&to_fetch[k].name[1], term);
-			to_fetch[k++].end = j;
-			i = j;
-		}
-		else
-			i++;
-	}
-	return (to_fetch);
-}
-
-static char	**create_lines(char *str, t_fetch *to_fetch, int len, t_term *term)
+char	**create_lines(char *str, t_fetch *to_fetch, int len, t_term *term)
 {
 	char	**mat;
 	int		k;
@@ -88,9 +52,8 @@ static char	**create_lines(char *str, t_fetch *to_fetch, int len, t_term *term)
 	{
 		while (k < len)
 		{
-			// if (!to_fetch[k].valid_name)
-			// 	return (NULL);
-			line_size = line_size - ft_strlen(to_fetch[k].name) + ft_strlen(to_fetch[k].val);
+			line_size = line_size - ft_strlen(to_fetch[k].name)
+				+ ft_strlen(to_fetch[k].val);
 			k++;
 		}
 	}
@@ -101,15 +64,30 @@ static char	**create_lines(char *str, t_fetch *to_fetch, int len, t_term *term)
 	return (mat);
 }
 
-static void	fill_lines(char *str, char **mat, t_fetch *to_fetch)
+static void	fill_lines_2(t_fetch *to_fetch, char **mat, int *j)
+{
+	int	n;
+
+	n = 0;
+	while (to_fetch->val[n])
+	{
+		if (to_fetch->val[n] == TK_SQUOTE || to_fetch->val[n] == TK_DQUOTE)
+			mat[1][*j] = to_fetch->val[n];
+		else if (to_fetch->val[n] == TK_GREATER || to_fetch->val[n] == TK_LESS)
+			mat[1][*j] = to_fetch->val[n];
+		else
+			mat[1][*j] = '0';
+		mat[0][(*j)++] = to_fetch->val[n++];
+	}
+}
+
+void	fill_lines(char *str, char **mat, t_fetch *to_fetch)
 {
 	int	i;
 	int	j;
 	int	k;
-	int	n;
 	int	flag;
 
-	n = 0;
 	i = 0;
 	k = 0;
 	j = 0;
@@ -120,17 +98,7 @@ static void	fill_lines(char *str, char **mat, t_fetch *to_fetch)
 			flag++;
 		if (str[i] == TK_DOLLAR && flag % 2 == 0)
 		{
-			n = 0;
-			while (to_fetch[k].val[n])
-			{
-				if (to_fetch[k].val[n] == TK_SQUOTE || to_fetch[k].val[n] == TK_DQUOTE)
-					mat[1][j] = to_fetch[k].val[n];
-				else if (to_fetch[k].val[n] == TK_GREATER || to_fetch[k].val[n] == TK_LESS)
-					mat[1][j] = to_fetch[k].val[n];
-				else
-					mat[1][j] = '0';
-				mat[0][j++] = to_fetch[k].val[n++];
-			}
+			fill_lines_2(&to_fetch[k], mat, &j);
 			i = to_fetch[k++].end;
 		}
 		else
@@ -143,17 +111,17 @@ static void	fill_lines(char *str, char **mat, t_fetch *to_fetch)
 
 int	expand(t_term *term, t_cmd *cmd, char *str)
 {
-	int	i;
+	int		i;
 	int		len;
 	t_fetch	*to_fetch;
-	char **mat;
+	char	**mat;
 
 	i = 0;
 	len = 0;
 	while (str[i])
 	{
 		if (str[i] == TK_SQUOTE)
-			i = skip_quote(str, i + 1, str[i]) + 1;
+			i = skip_quote(str, i + 1, str[i]);
 		else if (str[i] == TK_DOLLAR)
 			len++;
 		i++;

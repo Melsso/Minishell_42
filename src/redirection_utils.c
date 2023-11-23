@@ -6,56 +6,124 @@
 /*   By: smallem <smallem@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/22 17:12:58 by smallem           #+#    #+#             */
-/*   Updated: 2023/11/22 17:14:38 by smallem          ###   ########.fr       */
+/*   Updated: 2023/11/23 14:12:12 by smallem          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
 
-int	open_outfiles(int flag, char *name, t_cmd *cmd)
+char	*create_name(char *str, int j, int len, t_term *term)
 {
-	if (flag == 1 || flag == 3)
+	char	*name;
+	char	c;
+
+	name = (char *)my_malloc(&term->mem_lst, (len + 1));
+	name[len] = 0;
+	len = 0;
+	while (str[j] && str[j] != TK_SPACE && str[j] != TK_GREATER
+		&& str[j] != TK_LESS)
 	{
-		if (access(name, F_OK) == 0)
+		if (str[j] == TK_SQUOTE || str[j] == TK_DQUOTE)
 		{
-			if (access(name, W_OK) == 0)
-			{
-				if (flag == 1)
-					cmd->fd_out = open(name, O_WRONLY | O_TRUNC, 0644);
-				else if (flag == 3)
-					cmd->fd_out = open(name, O_WRONLY | O_APPEND, 0644);
-			}
-			else
-			{
-				ex_stat = 1;
-				return (ft_putstr_fd(name, 1), ft_putstr_fd(": Permission denied\n", 1), -1);
-			}
+			c = str[j];
+			j++;
+			while (str[j] && str[j] != c)
+				name[len++] = str[j++];
+			if (str[j] == c)
+				j++;
 		}
 		else
-			cmd->fd_out = open(name, O_WRONLY | O_CREAT, 0644);
+			name[len++] = str[j++];
 	}
-	return (1);
+	return (name);
 }
 
-int	open_infiles(int flag, char *name, t_cmd *cmd)
+int	get_name(char *str, t_term *term, char **name)
 {
-	if (flag == 2)
+	int		i;
+	int		j;
+	int		qflag;
+
+	qflag = 0;
+	i = 0;
+	while (str[i] && str[i] == TK_SPACE)
+		i++;
+	j = i;
+	while (str[i] && str[i] != TK_SPACE && str[i] != TK_GREATER
+		&& str[i] != TK_LESS)
 	{
-		if (access(name, F_OK) == 0)
+		if (str[i] == TK_SQUOTE || str[i] == TK_DQUOTE)
 		{
-			if (access(name, R_OK) == 0)
-				cmd->fd_in = open(name, O_RDONLY);
-			else
-			{
-				ex_stat = 1;
-				return (ft_putstr_fd(name, 1), ft_putstr_fd(": Permission denied\n", 1), -1);
-			}
+			i = skip_quote(str, i + 1, str[i]) + 1;
+			qflag = 1;
 		}
 		else
-		{
-			ex_stat = 1;
-			return (ft_putstr_fd(name, 1), ft_putstr_fd(": No such file or directory\n", 1), -1);
-		}
+			i++;
 	}
+	if (!qflag)
+		*name = ft_substr(str, j, i - j, term);
+	else
+		*name = create_name(str, j, i - j - 2, term);
+	return (i);
+}
+
+int	get_fname(char *str, t_term *term, int flag, t_cmd *cmd)
+{
+	int		i;
+	char	*name;
+
+	i = get_name(str, term, &name);
+	if (!ft_strlen(name))
+		return (printf("syntax error near unexpected token '%c'\n",
+				str[i]), -1);
+	if (flag == 1 || flag == 3)
+	{
+		if (open_outfiles(flag, name, cmd) == -1)
+			return (-1);
+	}
+	else if (flag == 2 || flag == 4)
+	{
+		if (open_infiles(flag, name, cmd) == -1)
+			return (-1);
+	}
+	if (cmd->fd_in < 0 || cmd->fd_out < 0)
+	{
+		ex_stat = 1;
+		return (ft_putstr_fd(name, 1),
+			ft_putstr_fd(": Open function error\n", 1), -1);
+	}
+	return (i);
+}
+
+static int	ft_msg(char **m, int i)
+{
+	ex_stat = 258;
+	return (printf("syntax error near unexpected token '%c'\n",
+			m[0][i]), 0);
+}
+
+int	test(int *i, char **m, t_term *term, t_cmd *cmd)
+{
+	char	*n_s;
+	char	*n_t;
+	int		len;
+	int		flag;
+
+	flag = !(m[0][*i] == TK_GREATER) + 1;
+	n_s = ft_strjoin(ft_substr(m[0], 0, *i, term), " ", term);
+	n_t = ft_strjoin(ft_substr(m[1], 0, *i, term), " ", term);
+	if (m[0][++(*i)] == TK_GREATER || m[0][*i] == TK_LESS)
+	{
+		if (m[0][*i] != m[0][*i - 1])
+			return (ft_msg(m, *i));
+		(*i)++;
+		flag += 2;
+	}
+	len = get_fname(&m[0][*i], term, flag, cmd) + *i;
+	if (len - *i == -1)
+		return (0);
+	m[0] = ft_strjoin(n_s, ft_substr(m[0], len, ft_strlen(m[0]), term), term);
+	m[1] = ft_strjoin(n_t, ft_substr(m[1], len, ft_strlen(m[1]), term), term);
+	*i -= (flag > 2) + 1;
 	return (1);
 }

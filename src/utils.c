@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   tree_utils2.c                                      :+:      :+:    :+:   */
+/*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: smallem <smallem@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/08/25 20:56:41 by smallem           #+#    #+#             */
-/*   Updated: 2023/11/22 18:51:08 by smallem          ###   ########.fr       */
+/*   Created: 2023/11/23 11:52:47 by smallem           #+#    #+#             */
+/*   Updated: 2023/11/23 17:15:01 by smallem          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,12 +28,10 @@ char	**copy_env(char **env, t_term *term)
 	return (new_ev);
 }
 
-char	*get_path(t_term *term, char *cmd)
+static char	*find_path(t_term *term)
 {
-	int		i;
 	char	*path;
-	char	*line;
-	char	**ppath;
+	int		i;
 
 	i = -1;
 	path = NULL;
@@ -45,6 +43,17 @@ char	*get_path(t_term *term, char *cmd)
 			break ;
 		}
 	}
+	return (path);
+}
+
+char	*get_path(t_term *term, char *cmd)
+{
+	int		i;
+	char	*path;
+	char	*line;
+	char	**ppath;
+
+	path = find_path(term);
 	if (!path)
 		return (NULL);
 	ppath = ft_split(path, ':', term);
@@ -58,47 +67,17 @@ char	*get_path(t_term *term, char *cmd)
 	return (NULL);
 }
 
-static void	check_rd(char **args, int *red)
+int	skip_spaces(char *str, int i)
 {
-	int	i;
-	int	j;
-
-	i = 0;
-	while (args[i])
-	{
-		j = 0;
-		red[i] = 0;
-		while (args[i][j])
-		{
-			if (args[i][j] == TK_SQUOTE || args[i][j] == TK_DQUOTE)
-				j = skip_quote(args[i], j, args[i][j]);
-			else if (args[i][j] == '>' || args[i][j] == '<')
-			{
-				red[i] = 1;
-				break ;
-			}
-			j++;
-		}
+	while (str[i] && (str[i] == TK_SPACE || str[i] == TK_TAB
+			|| str[i] == TK_NL))
 		i++;
-	}
+	return (i);
 }
 
-t_cmd	*build_cmd(t_term *term, t_tree **node, int *ind)
+int	is_space(char c)
 {
-	t_cmd	*cmd;
-	char	*str;
-	int		i;
-
-	cmd = (t_cmd *)my_malloc(&term->mem_lst, sizeof(t_cmd));
-	if ((*node)->content)
-	{
-		str = (char *)(*node)->content;
-		cmd->fd_in = 0;
-		cmd->fd_out = 1;
-		cmd->index = *ind;
-		if (!expand(term, cmd, str))
-			return (NULL);
-		return (cmd);
-	}
-	return (NULL);
+	if (c == TK_SPACE || c == TK_TAB || c == TK_NL)
+		return (1);
+	return (0);
 }

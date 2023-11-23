@@ -6,7 +6,7 @@
 /*   By: smallem <smallem@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/12 13:34:15 by smallem           #+#    #+#             */
-/*   Updated: 2023/11/22 12:37:27 by smallem          ###   ########.fr       */
+/*   Updated: 2023/11/23 12:15:15 by smallem          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ static int	count_len(char *arg, char *mat, int len)
 			dqflag++;
 		if (arg[i] == TK_SQUOTE && mat[i] == '0' && dqflag % 2 == 0)
 			i++;
-		else if (arg[i] == TK_DQUOTE && mat[i] == '0' && qflag % 2 == 0)	
+		else if (arg[i] == TK_DQUOTE && mat[i] == '0' && qflag % 2 == 0)
 			i++;
 		else
 		{
@@ -59,7 +59,7 @@ static char	*new_line(char *arg, char *mat, int len, char *line)
 			dqflag++;
 		if (arg[i] == TK_SQUOTE && mat[i] == '0' && dqflag % 2 == 0)
 			i++;
-		else if (arg[i] == TK_DQUOTE && mat[i] == '0' && qflag % 2 == 0)	
+		else if (arg[i] == TK_DQUOTE && mat[i] == '0' && qflag % 2 == 0)
 			i++;
 		else
 			line[len++] = arg[i++];

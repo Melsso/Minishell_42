@@ -6,11 +6,25 @@
 /*   By: smallem <smallem@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/10 12:24:36 by smallem           #+#    #+#             */
-/*   Updated: 2023/11/22 15:28:52 by smallem          ###   ########.fr       */
+/*   Updated: 2023/11/23 12:27:47 by smallem          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
+
+static void	output_args(t_cmd *cmd, int start, int nl_flag)
+{
+	while (cmd->args[start])
+	{
+		ft_putstr_fd(cmd->args[start], cmd->fd_out);
+		start++;
+		if (cmd->args[start])
+			ft_putstr_fd(" ", cmd->fd_out);
+	}
+	if (nl_flag)
+		ft_putstr_fd("\n", cmd->fd_out);
+	ex_stat = 0;
+}
 
 void	ft_echo(t_term *term, t_cmd *cmd)
 {
@@ -36,18 +50,5 @@ void	ft_echo(t_term *term, t_cmd *cmd)
 			break ;
 		start++;
 	}
-	while (cmd->args[start])
-	{
-		// printf("%s", cmd->args[start]);
-		ft_putstr_fd(cmd->args[start], cmd->fd_out);
-		start++;
-		if (cmd->args[start])
-			ft_putstr_fd(" ", cmd->fd_out);
-			// printf(" ");
-	}
-	if (nl_flag)
-		ft_putstr_fd("\n", cmd->fd_out);
-		// printf("\n");
-	ex_stat = 0;
-	return ;
+	output_args(cmd, start, nl_flag);
 }

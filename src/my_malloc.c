@@ -6,7 +6,7 @@
 /*   By: smallem <smallem@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/25 21:17:35 by smallem           #+#    #+#             */
-/*   Updated: 2023/09/10 14:10:05 by smallem          ###   ########.fr       */
+/*   Updated: 2023/11/23 11:58:08 by smallem          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,6 +39,7 @@ static void	add2lst(t_mem **lst, t_mem *node)
 		tmp->next = node;
 	}
 }
+
 void	*my_malloc(t_mem **lst, size_t size)
 {
 	void	*ptr;

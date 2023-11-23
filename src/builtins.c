@@ -6,7 +6,7 @@
 /*   By: smallem <smallem@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/07 18:00:41 by smallem           #+#    #+#             */
-/*   Updated: 2023/11/17 16:56:39 by smallem          ###   ########.fr       */
+/*   Updated: 2023/11/23 12:14:58 by smallem          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,7 @@ void	ft_pwd(t_term *term, t_cmd *cmd)
 {
 	int		i;
 	char	cwd[1024];
+
 	i = 0;
 	while (term->env[i])
 	{
@@ -46,6 +47,5 @@ void	ft_pwd(t_term *term, t_cmd *cmd)
 
 void	ft_exit(t_term *term, t_cmd *cmd)
 {
-	// possibly free stuff if not in child process
 	exit(ex_stat);
 }
