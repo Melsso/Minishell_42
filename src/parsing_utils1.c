@@ -6,7 +6,7 @@
 /*   By: smallem <smallem@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/05 14:21:51 by smallem           #+#    #+#             */
-/*   Updated: 2023/11/23 17:33:44 by smallem          ###   ########.fr       */
+/*   Updated: 2023/11/23 17:42:58 by smallem          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,52 +60,6 @@ int	check_quotes(char *str)
 	}
 	return (0);
 }
-
-// static int	check_flag_pipe(t_term *term, int *i, int *flag)
-// {
-// 	(*i)++;
-// 	while (term->input[*i] && (term->input[*i] == TK_SPACE
-// 			|| term->input[*i] == TK_NL))
-// 		(*i)++;
-// 	if (!term->input[*i])
-// 		return (3);
-// 	return (1);
-// }
-
-// int	check_flag(t_term *term)
-// {
-// 	int	i;
-// 	int	flag;
-
-// 	i = skip_spaces(term->input, 0) - 1;
-// 	while (term->input[++i])
-// 	{
-// 		if (term->input[i] == TK_PIPE)
-// 		{
-// 			if (check_flag_pipe(term, &i) == 3)
-// 				return (3);
-// 			flag = check_quotes(term->input + i);
-// 			if (!flag)
-// 			{
-// 				flag = skip_quote(term->input, i + 1, term->input[i]);
-// 				if (flag != -1)
-// 					i = flag;
-// 				continue ;
-// 			}
-// 			else
-// 				return (3 + flag);
-// 		}
-// 		else if (term->input[i] == TK_SQUOTE || term->input[i] == TK_DQUOTE)
-// 		{
-// 			flag = check_quotes(term->input + i);
-// 			if (!flag)
-// 				i = skip_quote(term->input, i + 1, term->input[i]);
-// 			else
-// 				return (flag);
-// 		}
-// 	}
-// 	return (0);
-// }
 
 static int	check_flag_pipe(t_term *term, int *i, int *flag)
 {

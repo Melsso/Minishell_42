@@ -6,7 +6,7 @@
 /*   By: smallem <smallem@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/19 18:03:00 by smallem           #+#    #+#             */
-/*   Updated: 2023/11/23 12:12:15 by smallem          ###   ########.fr       */
+/*   Updated: 2023/11/23 17:42:41 by smallem          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,7 @@ int	main(int argc, char **argv, char **envp)
 
 	(void)argv;
 	(void)envp;
-	ex_stat = 0;
+	term.ex_stat = 0;
 	if (argc != 1)
 		printf("No arguments allowed\n");
 	main_loop(&term, envp);

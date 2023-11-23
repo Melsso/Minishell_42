@@ -6,13 +6,13 @@
 /*   By: smallem <smallem@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/16 15:34:44 by smallem           #+#    #+#             */
-/*   Updated: 2023/11/23 14:09:43 by smallem          ###   ########.fr       */
+/*   Updated: 2023/11/23 17:44:13 by smallem          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
 
-int	open_outfiles(int flag, char *name, t_cmd *cmd)
+int	open_outfiles(int flag, char *name, t_cmd *cmd, t_term *term)
 {
 	if (flag == 1 || flag == 3)
 	{
@@ -27,7 +27,7 @@ int	open_outfiles(int flag, char *name, t_cmd *cmd)
 			}
 			else
 			{
-				ex_stat = 1;
+				term->ex_stat = 1;
 				return (ft_putstr_fd(name, 1),
 					ft_putstr_fd(": Permission denied\n", 1), -1);
 			}
@@ -38,7 +38,7 @@ int	open_outfiles(int flag, char *name, t_cmd *cmd)
 	return (1);
 }
 
-int	open_infiles(int flag, char *name, t_cmd *cmd)
+int	open_infiles(int flag, char *name, t_cmd *cmd, t_term *term)
 {
 	if (flag == 2)
 	{
@@ -48,14 +48,14 @@ int	open_infiles(int flag, char *name, t_cmd *cmd)
 				cmd->fd_in = open(name, O_RDONLY);
 			else
 			{
-				ex_stat = 1;
+				term->ex_stat = 1;
 				return (ft_putstr_fd(name, 1),
 					ft_putstr_fd(": Permission denied\n", 1), -1);
 			}
 		}
 		else
 		{
-			ex_stat = 1;
+			term->ex_stat = 1;
 			return (ft_putstr_fd(name, 1),
 				ft_putstr_fd(": No such file or directory\n", 1), -1);
 		}

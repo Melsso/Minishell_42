@@ -6,7 +6,7 @@
 /*   By: smallem <smallem@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/23 12:43:46 by smallem           #+#    #+#             */
-/*   Updated: 2023/11/23 12:59:12 by smallem          ###   ########.fr       */
+/*   Updated: 2023/11/23 17:42:06 by smallem          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,7 +62,7 @@ void	exe_builtins(t_cmd *cmd, t_term *term, int flag)
 		&& !ft_strncmp(cmd->args[0], "exit", ft_strlen("exit")))
 		ft_exit(term, cmd);
 	if (flag && is_builtin(cmd))
-		exit(ex_stat);
+		exit(term->ex_stat);
 	return ;
 }
 
@@ -139,7 +139,7 @@ int	exec_cmd(t_cmd *cmd, int tmp, t_term *term)
 	check_cmd(cmd, term);
 	if (execve(cmd->path, cmd->args, term->env) == -1)
 	{
-		ex_stat = errno;
+		term->ex_stat = errno;
 		exit(errno);
 	}
 	return (1);

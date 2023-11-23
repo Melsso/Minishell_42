@@ -6,13 +6,13 @@
 /*   By: smallem <smallem@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/10 12:24:36 by smallem           #+#    #+#             */
-/*   Updated: 2023/11/23 12:27:47 by smallem          ###   ########.fr       */
+/*   Updated: 2023/11/23 17:41:51 by smallem          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
 
-static void	output_args(t_cmd *cmd, int start, int nl_flag)
+static void	output_args(t_cmd *cmd, int start, int nl_flag, t_term *term)
 {
 	while (cmd->args[start])
 	{
@@ -23,7 +23,7 @@ static void	output_args(t_cmd *cmd, int start, int nl_flag)
 	}
 	if (nl_flag)
 		ft_putstr_fd("\n", cmd->fd_out);
-	ex_stat = 0;
+	term->ex_stat = 0;
 }
 
 void	ft_echo(t_term *term, t_cmd *cmd)
@@ -50,5 +50,5 @@ void	ft_echo(t_term *term, t_cmd *cmd)
 			break ;
 		start++;
 	}
-	output_args(cmd, start, nl_flag);
+	output_args(cmd, start, nl_flag, term);
 }

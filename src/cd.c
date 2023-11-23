@@ -6,7 +6,7 @@
 /*   By: smallem <smallem@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/17 16:00:51 by smallem           #+#    #+#             */
-/*   Updated: 2023/11/23 12:23:27 by smallem          ###   ########.fr       */
+/*   Updated: 2023/11/23 17:41:23 by smallem          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,7 @@ static void	move_home(t_term *term)
 	if (!term->env[i])
 	{
 		printf("cd: HOME not set\n");
-		ex_stat = 1;
+		term->ex_stat = 1;
 		return ;
 	}
 	chdir(path);
@@ -70,10 +70,10 @@ void	ft_cd(t_term *term, t_cmd *cmd)
 		if (chdir(cmd->args[1]) == -1)
 		{
 			printf("cd: %s: No such file or directory\n", cmd->args[1]);
-			ex_stat = 1;
+			term->ex_stat = 1;
 			return ;
 		}
 	}
 	update_env(ocwd, term);
-	ex_stat = 0;
+	term->ex_stat = 0;
 }

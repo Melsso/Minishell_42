@@ -6,7 +6,7 @@
 /*   By: smallem <smallem@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/19 18:05:52 by smallem           #+#    #+#             */
-/*   Updated: 2023/11/23 17:14:43 by smallem          ###   ########.fr       */
+/*   Updated: 2023/11/23 17:45:03 by smallem          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,8 +63,6 @@ typedef struct s_cmd
 	char	*path;
 }	t_cmd;
 
-int ex_stat;
-
 char	**copy_env(char **env, t_term *term);
 int		init_s(t_term *term, char *input);
 t_tree	*create_node(enum e_token type, void *content, t_term *term);
@@ -97,8 +95,8 @@ int		get_name(char *str, t_term *term, char **name);
 int		get_fname(char *str, t_term *term, int flag, t_cmd *cmd);
 int		test(int *i, char **m, t_term *term, t_cmd *cmd);
 
-int		open_outfiles(int flag, char *name, t_cmd *cmd);
-int		open_infiles(int flag, char *name, t_cmd *cmd);
+int		open_outfiles(int flag, char *name, t_cmd *cmd, t_term *term);
+int		open_infiles(int flag, char *name, t_cmd *cmd, t_term *term);
 
 void	clean(t_term *term, t_cmd *cmd, char **mat);
 

@@ -6,7 +6,7 @@
 /*   By: smallem <smallem@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/20 16:53:13 by smallem           #+#    #+#             */
-/*   Updated: 2023/09/28 16:55:20 by smallem          ###   ########.fr       */
+/*   Updated: 2023/11/23 17:40:38 by smallem          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,6 +57,7 @@ typedef struct s_term
 	char	**env;
 	pid_t	*pids;
 	t_mem	*mem_lst;
+	int		ex_stat;
 }	t_term;
 
 int			ft_isdigit(int c);

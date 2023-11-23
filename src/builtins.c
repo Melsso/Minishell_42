@@ -6,7 +6,7 @@
 /*   By: smallem <smallem@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/07 18:00:41 by smallem           #+#    #+#             */
-/*   Updated: 2023/11/23 12:14:58 by smallem          ###   ########.fr       */
+/*   Updated: 2023/11/23 17:41:11 by smallem          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ void	ft_env(t_term *term, t_cmd *cmd)
 	i = -1;
 	while (term->env[++i])
 		printf("%s\n", term->env[i]);
-	ex_stat = 0;
+	term->ex_stat = 0;
 }
 
 void	ft_pwd(t_term *term, t_cmd *cmd)
@@ -42,10 +42,10 @@ void	ft_pwd(t_term *term, t_cmd *cmd)
 		getcwd(cwd, sizeof(cwd));
 		printf("%s\n", cwd);
 	}
-	ex_stat = 0;
+	term->ex_stat = 0;
 }
 
 void	ft_exit(t_term *term, t_cmd *cmd)
 {
-	exit(ex_stat);
+	exit(term->ex_stat);
 }

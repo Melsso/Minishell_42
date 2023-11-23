@@ -6,7 +6,7 @@
 /*   By: smallem <smallem@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/10 12:24:11 by smallem           #+#    #+#             */
-/*   Updated: 2023/11/19 15:09:38 by smallem          ###   ########.fr       */
+/*   Updated: 2023/11/23 17:43:28 by smallem          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,7 @@ void	ft_unset(t_term *term, t_cmd *cmd)
 		len++;
 	if (len == 1)
 	{
-		ex_stat = 0;
+		term->ex_stat = 0;
 		return ;
 	}
 	else
@@ -52,6 +52,6 @@ void	ft_unset(t_term *term, t_cmd *cmd)
 			update_ev(term, cmd->args[len]);
 			len++;
 		}
-		ex_stat = 0;
+		term->ex_stat = 0;
 	}
 }

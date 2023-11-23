@@ -6,7 +6,7 @@
 /*   By: smallem <smallem@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/22 17:12:58 by smallem           #+#    #+#             */
-/*   Updated: 2023/11/23 14:12:12 by smallem          ###   ########.fr       */
+/*   Updated: 2023/11/23 17:44:46 by smallem          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,26 +78,26 @@ int	get_fname(char *str, t_term *term, int flag, t_cmd *cmd)
 				str[i]), -1);
 	if (flag == 1 || flag == 3)
 	{
-		if (open_outfiles(flag, name, cmd) == -1)
+		if (open_outfiles(flag, name, cmd, term) == -1)
 			return (-1);
 	}
 	else if (flag == 2 || flag == 4)
 	{
-		if (open_infiles(flag, name, cmd) == -1)
+		if (open_infiles(flag, name, cmd, term) == -1)
 			return (-1);
 	}
 	if (cmd->fd_in < 0 || cmd->fd_out < 0)
 	{
-		ex_stat = 1;
+		term->ex_stat = 1;
 		return (ft_putstr_fd(name, 1),
 			ft_putstr_fd(": Open function error\n", 1), -1);
 	}
 	return (i);
 }
 
-static int	ft_msg(char **m, int i)
+static int	ft_msg(char **m, int i, t_term *term)
 {
-	ex_stat = 258;
+	term->ex_stat = 258;
 	return (printf("syntax error near unexpected token '%c'\n",
 			m[0][i]), 0);
 }
@@ -115,7 +115,7 @@ int	test(int *i, char **m, t_term *term, t_cmd *cmd)
 	if (m[0][++(*i)] == TK_GREATER || m[0][*i] == TK_LESS)
 	{
 		if (m[0][*i] != m[0][*i - 1])
-			return (ft_msg(m, *i));
+			return (ft_msg(m, *i, term));
 		(*i)++;
 		flag += 2;
 	}

@@ -6,7 +6,7 @@
 /*   By: smallem <smallem@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/09 17:32:00 by smallem           #+#    #+#             */
-/*   Updated: 2023/11/23 16:50:28 by smallem          ###   ########.fr       */
+/*   Updated: 2023/11/23 17:43:47 by smallem          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ char	*fetch_line(char *to_find, t_term *term)
 
 	i = 0;
 	if (to_find[0] == TK_QST)
-		return (ft_strjoin(ft_itoa(ex_stat, term), &to_find[1], term));
+		return (ft_strjoin(ft_itoa(term->ex_stat, term), &to_find[1], term));
 	if (ft_isdigit(to_find[0]))
 		return (ft_strdup(&to_find[1], term));
 	while (term->env[i])
