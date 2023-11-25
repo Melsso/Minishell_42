@@ -6,7 +6,7 @@
 /*   By: smallem <smallem@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/16 15:34:44 by smallem           #+#    #+#             */
-/*   Updated: 2023/11/23 17:44:13 by smallem          ###   ########.fr       */
+/*   Updated: 2023/11/25 15:33:43 by smallem          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,6 +60,8 @@ int	open_infiles(int flag, char *name, t_cmd *cmd, t_term *term)
 				ft_putstr_fd(": No such file or directory\n", 1), -1);
 		}
 	}
+	else if (flag == 4)
+		open_heredoc(name, cmd, term);
 	return (1);
 }
 

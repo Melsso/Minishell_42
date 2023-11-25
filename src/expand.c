@@ -6,7 +6,7 @@
 /*   By: smallem <smallem@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/09 17:32:00 by smallem           #+#    #+#             */
-/*   Updated: 2023/11/23 17:43:47 by smallem          ###   ########.fr       */
+/*   Updated: 2023/11/25 14:09:35 by smallem          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,49 +64,46 @@ char	**create_lines(char *str, t_fetch *to_fetch, int len, t_term *term)
 	return (mat);
 }
 
-static void	fill_lines_2(t_fetch *to_fetch, char **mat, int *j)
+int	skip_rd(char *str, int i)
 {
-	int	n;
-
-	n = 0;
-	while (to_fetch->val[n])
-	{
-		if (to_fetch->val[n] == TK_SQUOTE || to_fetch->val[n] == TK_DQUOTE)
-			mat[1][*j] = to_fetch->val[n];
-		else if (to_fetch->val[n] == TK_GREATER || to_fetch->val[n] == TK_LESS)
-			mat[1][*j] = to_fetch->val[n];
-		else
-			mat[1][*j] = '0';
-		mat[0][(*j)++] = to_fetch->val[n++];
-	}
-}
-
-void	fill_lines(char *str, char **mat, t_fetch *to_fetch)
-{
-	int	i;
-	int	j;
-	int	k;
 	int	flag;
 
-	i = 0;
-	k = 0;
-	j = 0;
+	i += 2;
+	while (str[i] && is_space(str[i]))
+		i++;
 	flag = 0;
-	while (str[i])
+	while (str[i] && (!is_space(str[i]) || is_space(str[i]) && flag % 2 == 1))
 	{
-		if (str[i] == TK_SQUOTE)
+		if (str[i] == TK_SQUOTE || str[i] == TK_DQUOTE)
 			flag++;
-		if (str[i] == TK_DOLLAR && flag % 2 == 0)
-		{
-			fill_lines_2(&to_fetch[k], mat, &j);
-			i = to_fetch[k++].end;
-		}
-		else
-		{
-			mat[1][j] = '0';
-			mat[0][j++] = str[i++];
-		}
+		i++;
 	}
+	i--;
+	return (i);
+}
+
+int	skip_copy(char *str, char **mat, int *j, int i)
+{
+	int	flag;
+
+	mat[1][(*j)] = '0';
+	mat[0][(*j)++] = str[i++];
+	mat[1][(*j)] = '0';
+	mat[0][(*j)++] = str[i++];
+	while (str[i] && is_space(str[i]))
+	{
+		mat[1][(*j)] = '0';
+		mat[0][(*j)++] = str[i++];
+	}
+	flag = 0;
+	while (str[i] && (!is_space(str[i]) || is_space(str[i]) && flag % 2 == 1))
+	{
+		if (str[i] == TK_SQUOTE || str[i] == TK_DQUOTE)
+			flag++;
+		mat[1][(*j)] = '0';
+		mat[0][(*j)++] = str[i++];
+	}
+	return (i);
 }
 
 int	expand(t_term *term, t_cmd *cmd, char *str)
@@ -116,15 +113,16 @@ int	expand(t_term *term, t_cmd *cmd, char *str)
 	t_fetch	*to_fetch;
 	char	**mat;
 
-	i = 0;
+	i = -1;
 	len = 0;
-	while (str[i])
+	while (str[++i])
 	{
 		if (str[i] == TK_SQUOTE)
 			i = skip_quote(str, i + 1, str[i]);
+		else if (str[i] == TK_LESS && str[i + 1] == TK_LESS)
+			i = skip_rd(str, i);
 		else if (str[i] == TK_DOLLAR)
 			len++;
-		i++;
 	}
 	to_fetch = fill_fetch(str, term, len);
 	mat = create_lines(str, to_fetch, len, term);
@@ -134,6 +132,5 @@ int	expand(t_term *term, t_cmd *cmd, char *str)
 	if (!redirect(cmd, mat, term))
 		return (0);
 	mat = splt_space(cmd, mat[0], mat[1], term);
-	clean(term, cmd, mat);
-	return (1);
+	return (clean(term, cmd, mat));
 }

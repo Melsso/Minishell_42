@@ -6,7 +6,7 @@
 /*   By: smallem <smallem@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/23 12:43:46 by smallem           #+#    #+#             */
-/*   Updated: 2023/11/23 17:42:06 by smallem          ###   ########.fr       */
+/*   Updated: 2023/11/25 15:35:28 by smallem          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -125,6 +125,7 @@ int	exec_cmd(t_cmd *cmd, int tmp, t_term *term)
 {
 	dup2(tmp, STDIN_FILENO);
 	close(tmp);
+	exe_builtins(cmd, term, 1);
 	if (cmd->fd_in > 2)
 	{
 		dup2(cmd->fd_in, STDIN_FILENO);
@@ -135,7 +136,6 @@ int	exec_cmd(t_cmd *cmd, int tmp, t_term *term)
 		dup2(cmd->fd_out, STDOUT_FILENO);
 		close(cmd->fd_out);
 	}
-	exe_builtins(cmd, term, 1);
 	check_cmd(cmd, term);
 	if (execve(cmd->path, cmd->args, term->env) == -1)
 	{

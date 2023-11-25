@@ -6,11 +6,19 @@
 /*   By: smallem <smallem@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/05 14:21:51 by smallem           #+#    #+#             */
-/*   Updated: 2023/11/23 17:42:58 by smallem          ###   ########.fr       */
+/*   Updated: 2023/11/25 14:24:06 by smallem          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
+
+int	skip_spaces(char *str, int i)
+{
+	while (str[i] && (str[i] == TK_SPACE || str[i] == TK_TAB
+			|| str[i] == TK_NL))
+		i++;
+	return (i);
+}
 
 int	count_pipes(t_term *term)
 {

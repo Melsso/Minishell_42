@@ -6,7 +6,7 @@
 /*   By: smallem <smallem@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/19 18:05:52 by smallem           #+#    #+#             */
-/*   Updated: 2023/11/23 17:45:03 by smallem          ###   ########.fr       */
+/*   Updated: 2023/11/25 15:50:03 by smallem          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,6 @@ typedef struct	s_fetch
 	char	*val;
 	int		start;
 	int		end;
-	int		valid_name;
 }	t_fetch;
 
 typedef struct s_cmd t_cmd;
@@ -57,6 +56,7 @@ typedef struct s_cmd
 {
 	int		fd_in;
 	int		fd_out;
+	int		heredoc;
 	int		*red;
 	char	**args;
 	int		index;
@@ -78,6 +78,7 @@ int		check_flag(t_term *term);
 int		skip_spaces(char *str, int i);
 int		skip_quote(char *str, int i, char c);
 int		is_space(char c);
+void	init_arr(int *arr, int len);
 
 char	**my_split(char *str, t_term *term);
 char	**splt(char *input, t_term *term);
@@ -88,6 +89,8 @@ char	*fetch_line(char *to_find, t_term *term);
 t_fetch	*fill_fetch(char *str, t_term *term, int len);
 char	**create_lines(char *str, t_fetch *to_fetch, int len, t_term *term);
 void	fill_lines(char *str, char **mat, t_fetch *to_fetch);
+int		skip_rd(char *str, int i);
+int		skip_copy(char *str, char **mat, int *j, int i);
 
 int		redirect(t_cmd *cmd, char **mat, t_term *term);
 char	*create_name(char *str, int j, int len, t_term *term);
@@ -97,8 +100,9 @@ int		test(int *i, char **m, t_term *term, t_cmd *cmd);
 
 int		open_outfiles(int flag, char *name, t_cmd *cmd, t_term *term);
 int		open_infiles(int flag, char *name, t_cmd *cmd, t_term *term);
+void	open_heredoc(char *delim, t_cmd *cmd, t_term *term);
 
-void	clean(t_term *term, t_cmd *cmd, char **mat);
+int		clean(t_term *term, t_cmd *cmd, char **mat);
 
 int 	execution(t_term *term);
 int		is_builtin(t_cmd *cmd);

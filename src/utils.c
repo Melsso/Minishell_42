@@ -6,7 +6,7 @@
 /*   By: smallem <smallem@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/23 11:52:47 by smallem           #+#    #+#             */
-/*   Updated: 2023/11/23 17:15:01 by smallem          ###   ########.fr       */
+/*   Updated: 2023/11/25 14:30:37 by smallem          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,17 +67,18 @@ char	*get_path(t_term *term, char *cmd)
 	return (NULL);
 }
 
-int	skip_spaces(char *str, int i)
-{
-	while (str[i] && (str[i] == TK_SPACE || str[i] == TK_TAB
-			|| str[i] == TK_NL))
-		i++;
-	return (i);
-}
-
 int	is_space(char c)
 {
 	if (c == TK_SPACE || c == TK_TAB || c == TK_NL)
 		return (1);
 	return (0);
+}
+
+void	init_arr(int *arr, int len)
+{
+	int	i;
+
+	i = 0;
+	while (i < len)
+		arr[i++] = 0;
 }

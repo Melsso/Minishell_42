@@ -14,6 +14,7 @@ SRC		:=	main.c \
 			expand_utils.c \
 			redirection.c \
 			redirection_utils.c \
+			heredoc.c \
 			clean.c \
 			my_malloc.c \
 			tree_utils.c \

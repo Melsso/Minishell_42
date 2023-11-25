@@ -6,7 +6,7 @@
 /*   By: smallem <smallem@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/12 13:34:15 by smallem           #+#    #+#             */
-/*   Updated: 2023/11/23 12:15:15 by smallem          ###   ########.fr       */
+/*   Updated: 2023/11/25 13:57:59 by smallem          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,7 +67,7 @@ static char	*new_line(char *arg, char *mat, int len, char *line)
 	return (line);
 }
 
-void	clean(t_term *term, t_cmd *cmd, char **mat)
+int	clean(t_term *term, t_cmd *cmd, char **mat)
 {
 	int		i;
 	int		len;
@@ -82,4 +82,5 @@ void	clean(t_term *term, t_cmd *cmd, char **mat)
 		cmd->args[i] = new_line(cmd->args[i], mat[i], len, line);
 		i++;
 	}
+	return (1);
 }

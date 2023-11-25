@@ -6,7 +6,7 @@
 /*   By: smallem <smallem@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/22 11:58:18 by smallem           #+#    #+#             */
-/*   Updated: 2023/11/23 17:04:25 by smallem          ###   ########.fr       */
+/*   Updated: 2023/11/25 15:50:35 by smallem          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,7 @@ t_cmd	*build_cmd(t_term *term, t_tree **node, int *ind)
 		str = (char *)(*node)->content;
 		cmd->fd_in = 0;
 		cmd->fd_out = 1;
+		cmd->heredoc = 0;
 		cmd->index = *ind;
 		if (!expand(term, cmd, str))
 			return (NULL);
