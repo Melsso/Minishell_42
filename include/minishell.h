@@ -6,7 +6,7 @@
 /*   By: smallem <smallem@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/19 18:05:52 by smallem           #+#    #+#             */
-/*   Updated: 2023/11/25 15:50:03 by smallem          ###   ########.fr       */
+/*   Updated: 2023/11/25 16:28:57 by smallem          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,7 +94,7 @@ int		skip_copy(char *str, char **mat, int *j, int i);
 
 int		redirect(t_cmd *cmd, char **mat, t_term *term);
 char	*create_name(char *str, int j, int len, t_term *term);
-int		get_name(char *str, t_term *term, char **name);
+int		get_name(char *str, t_term *term, char **name, int flag);
 int		get_fname(char *str, t_term *term, int flag, t_cmd *cmd);
 int		test(int *i, char **m, t_term *term, t_cmd *cmd);
 

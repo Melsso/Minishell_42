@@ -6,7 +6,7 @@
 /*   By: smallem <smallem@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/22 17:12:58 by smallem           #+#    #+#             */
-/*   Updated: 2023/11/23 17:44:46 by smallem          ###   ########.fr       */
+/*   Updated: 2023/11/25 16:42:30 by smallem          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@ char	*create_name(char *str, int j, int len, t_term *term)
 	return (name);
 }
 
-int	get_name(char *str, t_term *term, char **name)
+int	get_name(char *str, t_term *term, char **name, int flag)
 {
 	int		i;
 	int		j;
@@ -60,7 +60,7 @@ int	get_name(char *str, t_term *term, char **name)
 		else
 			i++;
 	}
-	if (!qflag)
+	if (!qflag || flag == 4)
 		*name = ft_substr(str, j, i - j, term);
 	else
 		*name = create_name(str, j, i - j - 2, term);
@@ -72,7 +72,7 @@ int	get_fname(char *str, t_term *term, int flag, t_cmd *cmd)
 	int		i;
 	char	*name;
 
-	i = get_name(str, term, &name);
+	i = get_name(str, term, &name, flag);
 	if (!ft_strlen(name))
 		return (printf("syntax error near unexpected token '%c'\n",
 				str[i]), -1);
