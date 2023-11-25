@@ -6,7 +6,7 @@
 /*   By: smallem <smallem@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/22 11:58:39 by smallem           #+#    #+#             */
-/*   Updated: 2023/11/23 12:48:26 by smallem          ###   ########.fr       */
+/*   Updated: 2023/11/25 17:28:25 by smallem          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,6 +60,23 @@ int	exec_tree(t_term *term, t_tree *tree, int *tmp, int *fd)
 	return (0);
 }
 
+static void	iter_tree(t_tree *tree)
+{
+	t_cmd	*cmd;
+
+	if (tree->type == TK_PL)
+	{
+		iter_tree(tree->l);
+		iter_tree(tree->r);
+	}
+	else if (tree->type == TK_CMD)
+	{
+		cmd = (t_cmd *)tree->content;
+		if (cmd->heredoc)
+			unlink("heredoc");
+	}
+}
+
 int	execution(t_term *term)
 {
 	int	tmp;
@@ -70,5 +87,6 @@ int	execution(t_term *term)
 		return (1);
 	exec_tree(term, term->ast, &tmp, fd);
 	close(tmp);
+	iter_tree(term->ast);
 	return (0);
 }
