@@ -6,7 +6,7 @@
 /*   By: smallem <smallem@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/23 11:52:44 by smallem           #+#    #+#             */
-/*   Updated: 2023/11/26 17:37:34 by smallem          ###   ########.fr       */
+/*   Updated: 2023/11/26 18:51:10 by smallem          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,7 @@ char	**splt(char *str, t_term *term)
 		if (!str[i])
 			break ;
 		if (str[i] == TK_SQUOTE || str[i] == TK_DQUOTE)
-			i = skip_quote(str, i + 1, str[i]) + 1;
+			i = skip_quote(str, i + 1, str[i]);
 		else if (str[i] == TK_PIPE)
 		{
 			mat[j++] = ft_substr(str, 0, i, term);

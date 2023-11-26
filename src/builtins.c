@@ -6,7 +6,7 @@
 /*   By: smallem <smallem@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/07 18:00:41 by smallem           #+#    #+#             */
-/*   Updated: 2023/11/26 18:45:14 by smallem          ###   ########.fr       */
+/*   Updated: 2023/11/26 18:52:36 by smallem          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -122,6 +122,8 @@ void	ft_exit(t_term *term, t_cmd *cmd)
 		term->ex_stat = 1;
 		return ;
 	}
+	else if (len == 1)
+		exit(term->ex_stat);
 	else
 	{
 		check(term, cmd, len);
