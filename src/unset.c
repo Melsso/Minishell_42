@@ -6,7 +6,7 @@
 /*   By: smallem <smallem@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/10 12:24:11 by smallem           #+#    #+#             */
-/*   Updated: 2023/11/23 17:43:28 by smallem          ###   ########.fr       */
+/*   Updated: 2023/11/26 17:08:57 by smallem          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,11 +15,14 @@
 static void	update_ev(t_term *term, char *var)
 {
 	size_t	i;
+	char	**mat;
 
 	i = 0;
 	while (term->env[i])
 	{
-		if (!ft_strncmp(term->env[i], var, ft_strlen(var)))
+		mat = ft_split(term->env[i], '=', term);
+		if (!ft_strncmp(mat[0], var, ft_strlen(var))
+			&& !ft_strncmp(mat[0], var, ft_strlen(mat[0])))
 		{
 			while (term->env[i])
 			{

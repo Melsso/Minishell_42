@@ -45,6 +45,7 @@ $(OBJ_DIR):
 $(NAME): $(OBJS)
 	cd libs/libft && make
 	$(CC) $(CFLAGS) $(OBJS) $(LIBFT) -lreadline $(HEADER) -o $(NAME)
+	clear
 
 clean:
 	cd libs/libft && make clean

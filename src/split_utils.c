@@ -6,7 +6,7 @@
 /*   By: smallem <smallem@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/23 11:52:44 by smallem           #+#    #+#             */
-/*   Updated: 2023/11/23 13:02:35 by smallem          ###   ########.fr       */
+/*   Updated: 2023/11/26 17:37:34 by smallem          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,10 +37,12 @@ char	**splt(char *str, t_term *term)
 
 	mat = (char **)my_malloc(&term->mem_lst, sizeof(char *) * (m_siz(str) + 2));
 	j = 0;
-	i = 0;
-	while (str[i])
+	i = -1;
+	while (str[++i])
 	{
 		i = skip_spaces(str, i);
+		if (!str[i])
+			break ;
 		if (str[i] == TK_SQUOTE || str[i] == TK_DQUOTE)
 			i = skip_quote(str, i + 1, str[i]) + 1;
 		else if (str[i] == TK_PIPE)
@@ -49,8 +51,6 @@ char	**splt(char *str, t_term *term)
 			str = str + i + 1;
 			i = 0;
 		}
-		else
-			i++;
 	}
 	mat[j++] = ft_strdup(str, term);
 	mat[j] = NULL;
