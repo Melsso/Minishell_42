@@ -6,7 +6,7 @@
 /*   By: smallem <smallem@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/20 16:53:13 by smallem           #+#    #+#             */
-/*   Updated: 2023/11/23 17:40:38 by smallem          ###   ########.fr       */
+/*   Updated: 2023/11/26 15:42:02 by smallem          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,6 +42,7 @@ typedef struct s_tree
 {
 	enum e_token	type;
 	void			*content;
+	int				err;
 	t_tree			*r;
 	t_tree			*l;
 }	t_tree;

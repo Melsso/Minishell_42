@@ -6,7 +6,7 @@
 /*   By: smallem <smallem@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/09 17:32:00 by smallem           #+#    #+#             */
-/*   Updated: 2023/11/26 14:27:38 by smallem          ###   ########.fr       */
+/*   Updated: 2023/11/26 17:05:54 by smallem          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ char	*fetch_line(char *to_find, t_term *term)
 	i = 0;
 	if (to_find[0] == TK_QST)
 		return (ft_strjoin(ft_itoa(term->ex_stat, term), &to_find[1], term));
-	if (ft_isdigit(to_find[0]))
+	if (!ft_isalpha(to_find[0]) && to_find[0] != '?' && to_find[0] != '_')
 		return (ft_strdup(&to_find[1], term));
 	while (term->env[i])
 	{
@@ -108,29 +108,29 @@ int	skip_copy(char *str, char **mat, int *j, int i)
 
 int	expand(t_term *term, t_cmd *cmd, char *str)
 {
-	int		i;
-	int		len;
+	int		i[3];
 	t_fetch	*to_fetch;
 	char	**mat;
 
-	i = -1;
-	len = 0;
-	while (str[++i])
+	i[2] = -1;
+	init_arr(i, 2);
+	while (str[++i[2]])
 	{
-		if (str[i] == TK_SQUOTE)
-			i = skip_quote(str, i + 1, str[i]);
-		else if (str[i] == TK_LESS && str[i + 1] == TK_LESS)
-			i = skip_rd(str, i);
-		else if (str[i] == TK_DOLLAR)
-			len++;
+		if (str[i[2]] == TK_DQUOTE)
+			i[1]++;
+		else if (str[i[2]] == TK_SQUOTE && i[1] % 2 == 0)
+			i[2] = skip_quote(str, i[2] + 1, str[i[2]]);
+		else if (str[i[2]] == TK_LESS && str[i[2] + 1] == TK_LESS)
+			i[2] = skip_rd(str, i[2]);
+		else if (str[i[2]] == TK_DOLLAR)
+			i[0]++;
 	}
-	to_fetch = fill_fetch(str, term, len);
-	mat = create_lines(str, to_fetch, len, term);
+	to_fetch = fill_fetch(str, term, i[0]);
+	mat = create_lines(str, to_fetch, i[0], term);
 	if (!mat)
 		return (0);
 	fill_lines(str, mat, to_fetch);
 	if (!redirect(cmd, mat, term))
 		return (0);
-	mat = splt_space(cmd, mat[0], mat[1], term);
 	return (clean(term, cmd, mat));
 }

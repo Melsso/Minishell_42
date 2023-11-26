@@ -6,7 +6,7 @@
 /*   By: smallem <smallem@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/22 17:12:58 by smallem           #+#    #+#             */
-/*   Updated: 2023/11/25 16:42:30 by smallem          ###   ########.fr       */
+/*   Updated: 2023/11/26 16:57:27 by smallem          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,8 +74,7 @@ int	get_fname(char *str, t_term *term, int flag, t_cmd *cmd)
 
 	i = get_name(str, term, &name, flag);
 	if (!ft_strlen(name))
-		return (printf("syntax error near unexpected token '%c'\n",
-				str[i]), -1);
+		return (-1);
 	if (flag == 1 || flag == 3)
 	{
 		if (open_outfiles(flag, name, cmd, term) == -1)
@@ -108,10 +107,12 @@ int	test(int *i, char **m, t_term *term, t_cmd *cmd)
 	char	*n_t;
 	int		len;
 	int		flag;
+	int		j;
 
 	flag = !(m[0][*i] == TK_GREATER) + 1;
 	n_s = ft_strjoin(ft_substr(m[0], 0, *i, term), " ", term);
 	n_t = ft_strjoin(ft_substr(m[1], 0, *i, term), " ", term);
+	j = *i;
 	if (m[0][++(*i)] == TK_GREATER || m[0][*i] == TK_LESS)
 	{
 		if (m[0][*i] != m[0][*i - 1])
@@ -121,7 +122,8 @@ int	test(int *i, char **m, t_term *term, t_cmd *cmd)
 	}
 	len = get_fname(&m[0][*i], term, flag, cmd) + *i;
 	if (len - *i == -1)
-		return (0);
+		return (printf("syntax error near unexpected token '%c'\n",
+				m[0][j]), 0);
 	m[0] = ft_strjoin(n_s, ft_substr(m[0], len, ft_strlen(m[0]), term), term);
 	m[1] = ft_strjoin(n_t, ft_substr(m[1], len, ft_strlen(m[1]), term), term);
 	*i -= (flag > 2) + 1;

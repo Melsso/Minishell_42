@@ -6,7 +6,7 @@
 /*   By: smallem <smallem@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/12 13:34:15 by smallem           #+#    #+#             */
-/*   Updated: 2023/11/25 13:57:59 by smallem          ###   ########.fr       */
+/*   Updated: 2023/11/26 17:02:54 by smallem          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,6 +73,7 @@ int	clean(t_term *term, t_cmd *cmd, char **mat)
 	int		len;
 	char	*line;
 
+	mat = splt_space(cmd, mat[0], mat[1], term);
 	i = 0;
 	while (cmd->args[i])
 	{

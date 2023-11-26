@@ -6,7 +6,7 @@
 /*   By: smallem <smallem@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/07 18:00:41 by smallem           #+#    #+#             */
-/*   Updated: 2023/11/26 14:38:51 by smallem          ###   ########.fr       */
+/*   Updated: 2023/11/26 16:57:07 by smallem          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,12 +14,17 @@
 
 void	ft_env(t_term *term, t_cmd *cmd)
 {
-	int	i;
+	int		i;
+	char	**mat;
 
 	i = -1;
 	(void)cmd;
 	while (term->env[++i])
-		printf("%s\n", term->env[i]);
+	{
+		mat = ft_split(term->env[i], '=', term);
+		if (mat[1])
+			printf("%s\n", term->env[i]);
+	}
 	term->ex_stat = 0;
 }
 
@@ -51,6 +56,5 @@ void	ft_exit(t_term *term, t_cmd *cmd)
 {
 	(void)cmd;
 	free_lst(&term->mem_lst);
-	// system("leaks minishell");
 	exit(term->ex_stat);
 }

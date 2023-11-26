@@ -6,31 +6,11 @@
 /*   By: smallem <smallem@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/10 12:24:27 by smallem           #+#    #+#             */
-/*   Updated: 2023/11/26 14:29:51 by smallem          ###   ########.fr       */
+/*   Updated: 2023/11/26 16:56:37 by smallem          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
-
-static char	*fetch_l(t_term *term, char *arg, char ***name)
-{
-	char	*line;
-	int		i;
-
-	i = 0;
-	while (arg[i])
-	{
-		if (arg[i] == '=')
-			break ;
-		i++;
-	}
-	if (!arg[i])
-		line = ft_strjoin(arg, "=", term);
-	else
-		line = ft_strdup(arg, term);
-	*name = ft_split(line, '=', term);
-	return (line);
-}
 
 static void	add_2ev(t_term *term, char *line, int i)
 {
@@ -48,17 +28,53 @@ static void	add_2ev(t_term *term, char *line, int i)
 	}
 }
 
+static void	err_msg(char c, t_term *term)
+{
+	printf("export: '%c': not a valid identifier\n", c);
+	term->ex_stat = 1;
+	return ;
+}
+
+static char	*make_line(char *arg, t_term *term)
+{
+	char	*delim;
+	char	*line;
+	int		i;
+
+	delim = ft_strchr(arg, '=');
+	if (arg == delim)
+		return (err_msg(*arg, term), NULL);
+	if (delim)
+		*delim++ = 0;
+	if (ft_isalpha(arg[0]) || arg[0] == '_')
+	{
+		i = 1;
+		while (arg[i] && (ft_isalnum(arg[i]) || arg[i] == '_'))
+			i++;
+		if (arg[i])
+			return (err_msg(arg[i], term), NULL);
+	}
+	else
+		return (err_msg(arg[0], term), NULL);
+	line = ft_strjoin(ft_strjoin(arg, "=", term), delim, term);
+	return (line);
+}
+
 static void	update_ev(t_term *term, char *arg)
 {
 	int		i;
+	char	**mat;
 	char	*line;
-	char	**name;
 
-	line = fetch_l(term, arg, &name);
 	i = 0;
+	line = make_line(arg, term);
+	if (!line)
+		return ;
 	while (term->env[i])
 	{
-		if (!ft_strncmp(term->env[i], name[0], ft_strlen(name[0])))
+		mat = ft_split(term->env[i], '=', term);
+		if (!ft_strncmp(mat[0], arg, ft_strlen(arg))
+			&& !ft_strncmp(mat[0], arg, ft_strlen(mat[0])))
 		{
 			term->env[i] = line;
 			break ;
@@ -76,7 +92,12 @@ void	ft_export(t_term *term, t_cmd *cmd)
 	while (cmd->args[len])
 		len++;
 	if (len == 1)
-		ft_env(term, cmd);
+	{
+		len = -1;
+		while (term->env[++len])
+			printf("declare -x %s\n", term->env[len]);
+		term->ex_stat = 0;
+	}
 	else
 	{
 		len = 1;

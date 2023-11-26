@@ -6,7 +6,7 @@
 /*   By: smallem <smallem@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/22 11:58:18 by smallem           #+#    #+#             */
-/*   Updated: 2023/11/26 13:49:04 by smallem          ###   ########.fr       */
+/*   Updated: 2023/11/26 15:50:51 by smallem          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,12 +67,38 @@ void	update_tree(t_term *term, t_tree **root, int *i)
 			(*root)->content = build_cmd(term, root, i);
 			if ((*root)->content == NULL)
 			{
-				term->ast = NULL;
+				(*root)->err = 1;
 				return ;
 			}
+			else
+				(*root)->err = 0;
 			(*i)++;
 		}
 	}
+}
+
+static int	iter(t_tree *root)
+{
+	t_tree	*node;
+
+	node = root;
+	while (node)
+	{
+		if (node->type == TK_PL)
+		{
+			if (node->l && node->l->err)
+				return (0);
+			node = node->r;
+		}
+		else if (node->type == TK_CMD)
+		{
+			if (node->err)
+				return (0);
+			else
+				return (1);
+		}
+	}
+	return (1);
 }
 
 int	init_s(t_term *term, char *input)
@@ -96,7 +122,7 @@ int	init_s(t_term *term, char *input)
 	populate_tree(&root, term);
 	term->ast = root;
 	update_tree(term, &term->ast, &i);
-	if (term->ast == NULL)
-		return (0);
+	if (!iter(term->ast))
+		term->ast = NULL;
 	return (1);
 }
