@@ -6,7 +6,7 @@
 /*   By: smallem <smallem@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/25 12:22:54 by smallem           #+#    #+#             */
-/*   Updated: 2023/11/25 17:24:25 by smallem          ###   ########.fr       */
+/*   Updated: 2023/11/26 14:38:09 by smallem          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,9 +19,9 @@ static int	check_expand(char **delim, t_term *term)
 
 	i = 0;
 	flag = 0;
-	while (*delim[i])
+	while (delim[0][i])
 	{
-		if (*delim[i] == TK_SQUOTE || *delim[i] == TK_DQUOTE)
+		if (delim[0][i] == TK_SQUOTE || *delim[i] == TK_DQUOTE)
 		{
 			flag = 1;
 			break ;
@@ -30,7 +30,7 @@ static int	check_expand(char **delim, t_term *term)
 	}
 	if (flag)
 	{
-		*delim = ft_substr(*delim, 1, ft_strlen(*delim) - 2, term);
+		delim[0] = ft_substr(*delim, 1, ft_strlen(*delim) - 2, term);
 		return (flag);
 	}
 	else
@@ -50,15 +50,15 @@ static char	*expand_line(char *line, t_term *term)
 		if (line[i] == TK_DOLLAR)
 		{
 			j = i++;
-			while (line[i] && !is_space(line[i]) && line[i] != TK_DOLLAR)
+			while (line[i] && !is_space(line[i]) && line[i] != TK_DOLLAR
+				&& line[i] != TK_SQUOTE && line[i] != TK_DQUOTE)
 				i++;
 			mat[0] = ft_substr(line, j, i - j, term);
 			mat[1] = ft_substr(line, 0, j, term);
 			mat[2] = ft_substr(line, i, ft_strlen(line), term);
+			mat[3] = fetch_line(mat[0] + 1, term);
 			if (ft_strlen(mat[0]) == 1 && mat[0][0] == TK_DOLLAR)
 				mat[3] = ft_strdup("$", term);
-			else
-				mat[3] = fetch_line(mat[0] + 1, term);
 			line = ft_strjoin(ft_strjoin(mat[1], mat[3], term), mat[2], term);
 			i = j + ft_strlen(mat[3]);
 		}

@@ -6,7 +6,7 @@
 /*   By: smallem <smallem@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/09 17:32:00 by smallem           #+#    #+#             */
-/*   Updated: 2023/11/25 14:09:35 by smallem          ###   ########.fr       */
+/*   Updated: 2023/11/26 14:27:38 by smallem          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,9 +57,9 @@ char	**create_lines(char *str, t_fetch *to_fetch, int len, t_term *term)
 			k++;
 		}
 	}
-	mat[0] = (char *)my_malloc(&term->mem_lst, line_size);
+	mat[0] = (char *)my_malloc(&term->mem_lst, line_size + 1);
 	mat[0][line_size] = 0;
-	mat[1] = (char *)my_malloc(&term->mem_lst, line_size);
+	mat[1] = (char *)my_malloc(&term->mem_lst, line_size + 1);
 	mat[1][line_size] = 0;
 	return (mat);
 }
@@ -72,7 +72,7 @@ int	skip_rd(char *str, int i)
 	while (str[i] && is_space(str[i]))
 		i++;
 	flag = 0;
-	while (str[i] && (!is_space(str[i]) || is_space(str[i]) && flag % 2 == 1))
+	while (str[i] && (!is_space(str[i]) || (is_space(str[i]) && flag % 2 == 1)))
 	{
 		if (str[i] == TK_SQUOTE || str[i] == TK_DQUOTE)
 			flag++;
@@ -96,7 +96,7 @@ int	skip_copy(char *str, char **mat, int *j, int i)
 		mat[0][(*j)++] = str[i++];
 	}
 	flag = 0;
-	while (str[i] && (!is_space(str[i]) || is_space(str[i]) && flag % 2 == 1))
+	while (str[i] && (!is_space(str[i]) || (is_space(str[i]) && flag % 2 == 1)))
 	{
 		if (str[i] == TK_SQUOTE || str[i] == TK_DQUOTE)
 			flag++;

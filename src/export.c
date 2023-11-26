@@ -6,7 +6,7 @@
 /*   By: smallem <smallem@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/10 12:24:27 by smallem           #+#    #+#             */
-/*   Updated: 2023/11/23 14:16:24 by smallem          ###   ########.fr       */
+/*   Updated: 2023/11/26 14:29:51 by smallem          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@ static void	add_2ev(t_term *term, char *line, int i)
 
 	if (!term->env[i])
 	{
-		new_ev = (char **)my_malloc(&term->mem_lst, (i + 1) * sizeof(char *));
+		new_ev = (char **)my_malloc(&term->mem_lst, (i + 2) * sizeof(char *));
 		i = -1;
 		while (term->env[++i])
 			new_ev[i] = ft_strdup(term->env[i], term);
@@ -52,7 +52,6 @@ static void	update_ev(t_term *term, char *arg)
 {
 	int		i;
 	char	*line;
-	char	**new_ev;
 	char	**name;
 
 	line = fetch_l(term, arg, &name);

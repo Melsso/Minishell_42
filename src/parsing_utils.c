@@ -6,7 +6,7 @@
 /*   By: smallem <smallem@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/23 18:54:27 by smallem           #+#    #+#             */
-/*   Updated: 2023/11/23 17:00:54 by smallem          ###   ########.fr       */
+/*   Updated: 2023/11/26 14:11:48 by smallem          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,6 +73,7 @@ int	check_input(char *input, t_term *term)
 {
 	term->input = NULL;
 	term->input = ft_strdup(input, term);
+	free(input);
 	if (!check_syntax(term))
 		return (0);
 	read_more(0, term);

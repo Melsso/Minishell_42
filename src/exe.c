@@ -6,7 +6,7 @@
 /*   By: smallem <smallem@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/23 12:43:46 by smallem           #+#    #+#             */
-/*   Updated: 2023/11/25 15:56:48 by smallem          ###   ########.fr       */
+/*   Updated: 2023/11/26 13:47:48 by smallem          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,7 +98,6 @@ static int	check_perm(t_cmd *cmd, t_term *term, int i)
 static void	check_cmd(t_cmd *cmd, t_term *term)
 {
 	int		i;
-	char	**mat;
 	int		flag;
 
 	i = 0;

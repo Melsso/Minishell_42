@@ -6,7 +6,7 @@
 /*   By: smallem <smallem@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/22 11:58:18 by smallem           #+#    #+#             */
-/*   Updated: 2023/11/25 15:50:35 by smallem          ###   ########.fr       */
+/*   Updated: 2023/11/26 13:49:04 by smallem          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,6 @@ t_cmd	*build_cmd(t_term *term, t_tree **node, int *ind)
 {
 	t_cmd	*cmd;
 	char	*str;
-	int		i;
 
 	cmd = (t_cmd *)my_malloc(&term->mem_lst, sizeof(t_cmd));
 	if ((*node)->content)
@@ -38,7 +37,6 @@ void	populate_tree(t_tree **root, t_term *term)
 	t_tree	*tmp;
 	ssize_t	i;
 	char	**pipe_split;
-	char	**cmd;
 
 	pipe_split = splt(term->input, term);
 	i = -1;

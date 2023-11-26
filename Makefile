@@ -1,6 +1,6 @@
 NAME = minishell
 CC = cc
-CFLAGS = 
+CFLAGS = -Wall -Wextra -Werror -fsanitize=address
 
 OBJ_DIR = obj/
 SRC_DIR = src/
