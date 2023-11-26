@@ -6,7 +6,7 @@
 /*   By: smallem <smallem@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/23 12:43:46 by smallem           #+#    #+#             */
-/*   Updated: 2023/11/26 13:47:48 by smallem          ###   ########.fr       */
+/*   Updated: 2023/11/26 19:29:24 by smallem          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -139,7 +139,7 @@ int	exec_cmd(t_cmd *cmd, int tmp, t_term *term)
 	if (execve(cmd->path, cmd->args, term->env) == -1)
 	{
 		term->ex_stat = errno;
-		exit(errno);
+		exit(term->ex_stat);
 	}
 	return (1);
 }

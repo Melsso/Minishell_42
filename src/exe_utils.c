@@ -6,7 +6,7 @@
 /*   By: smallem <smallem@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/22 11:58:39 by smallem           #+#    #+#             */
-/*   Updated: 2023/11/26 17:42:14 by smallem          ###   ########.fr       */
+/*   Updated: 2023/11/26 19:19:19 by smallem          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ static int	cmd_null(t_term *term, t_cmd *cmd, int *tmp)
 			return (1);
 		}
 		close(*tmp);
-		while (waitpid(-1, NULL, WUNTRACED) != -1)
+		while (waitpid(-1, &term->ex_stat, WUNTRACED) != -1)
 			;
 		*tmp = dup(STDIN_FILENO);
 	}
