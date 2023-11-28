@@ -6,7 +6,7 @@
 /*   By: smallem <smallem@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/07 18:00:41 by smallem           #+#    #+#             */
-/*   Updated: 2023/11/26 18:52:36 by smallem          ###   ########.fr       */
+/*   Updated: 2023/11/28 13:02:10 by smallem          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,19 +91,13 @@ static void	check(t_term *term, t_cmd *cmd, int len)
 		&& cmd->args[1][len] <= '9')
 		len++;
 	if (cmd->args[1][len])
-	{
-		printf("exit: %s: numeric argument required\n", cmd->args[1]);
-		term->ex_stat = 255;
-	}
+		ft_print_err(cmd->args[1], 255, term);
 	else
 	{
 		d = ft_atd(cmd->args[1]);
 		len = ft_strlen(cmd->args[1]) - (d < 0);
 		if (len > 19)
-		{
-			printf("exit: %s: numeric argument required\n", cmd->args[1]);
-			term->ex_stat = 255;
-		}
+			ft_print_err(cmd->args[1], 255, term);
 		else
 			term->ex_stat = (char)d;
 	}
@@ -118,12 +112,15 @@ void	ft_exit(t_term *term, t_cmd *cmd)
 		len++;
 	if (len > 2)
 	{
-		printf("exit: too many arguments\n");
+		ft_error("exit: too many arguments\n", NULL, term, 1);
 		term->ex_stat = 1;
 		return ;
 	}
 	else if (len == 1)
+	{
+		free_lst(&term->mem_lst);
 		exit(term->ex_stat);
+	}
 	else
 	{
 		check(term, cmd, len);

@@ -6,7 +6,7 @@
 /*   By: smallem <smallem@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/19 18:05:52 by smallem           #+#    #+#             */
-/*   Updated: 2023/11/26 19:16:20 by smallem          ###   ########.fr       */
+/*   Updated: 2023/11/28 14:00:25 by smallem          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,8 +70,14 @@ void	create_tree(ssize_t nb_pipes, t_tree **root, t_term *term);
 void	populate_tree(t_tree **root, t_term *term);
 void	update_tree(t_term *term, t_tree **root, int *i);
 t_cmd	*build_cmd(t_term *term, t_tree **node, int *ind);
+int		check_perm(t_cmd *cmd, t_term *term, int i);
+int		check_cmd(t_cmd *cmd, t_term *term);
+void	ft_error(char *msg, char *ptr, t_term *term, int val);
+void	ft_print_err(char *ptr, int val, t_term *term);
+
 
 int 	check_input(char *input, t_term *term);
+int		check_syntax_2(t_term *term);
 int		count_pipes(t_term *term);
 int		check_quotes(char *str);
 int		check_flag(t_term *term);

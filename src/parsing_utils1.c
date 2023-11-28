@@ -6,7 +6,7 @@
 /*   By: smallem <smallem@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/05 14:21:51 by smallem           #+#    #+#             */
-/*   Updated: 2023/11/25 14:24:06 by smallem          ###   ########.fr       */
+/*   Updated: 2023/11/28 12:55:28 by smallem          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,8 +72,7 @@ int	check_quotes(char *str)
 static int	check_flag_pipe(t_term *term, int *i, int *flag)
 {
 	(*i)++;
-	while (term->input[*i] && (term->input[*i] == TK_SPACE
-			|| term->input[*i] == TK_NL))
+	while (term->input[*i] && is_space(term->input[*i]))
 		(*i)++;
 	if (!term->input[*i])
 	{

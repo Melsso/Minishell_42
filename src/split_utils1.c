@@ -6,7 +6,7 @@
 /*   By: smallem <smallem@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/07 16:42:21 by smallem           #+#    #+#             */
-/*   Updated: 2023/11/23 17:16:30 by smallem          ###   ########.fr       */
+/*   Updated: 2023/11/28 12:56:32 by smallem          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ static int	m_size(char *str, char *str_tok)
 	i = skip_spaces(str, 0);
 	while (str[i])
 	{
-		if (str[i] == TK_SPACE || str[i] == TK_TAB || str[i] == TK_NL)
+		if (is_space(str[i]))
 		{
 			i = skip_spaces(str, i);
 			if (str[i])

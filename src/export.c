@@ -6,7 +6,7 @@
 /*   By: smallem <smallem@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/10 12:24:27 by smallem           #+#    #+#             */
-/*   Updated: 2023/11/26 16:56:37 by smallem          ###   ########.fr       */
+/*   Updated: 2023/11/28 12:51:39 by smallem          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,9 @@ static void	add_2ev(t_term *term, char *line, int i)
 
 static void	err_msg(char c, t_term *term)
 {
-	printf("export: '%c': not a valid identifier\n", c);
+	ft_putstr_fd("export: '", 2);
+	ft_putchar_fd(c, 2);
+	ft_putstr_fd("': not a valid identifier\n", 2);
 	term->ex_stat = 1;
 	return ;
 }

@@ -1,6 +1,6 @@
 NAME = minishell
 CC = cc
-CFLAGS = -Wall -Wextra -Werror
+CFLAGS = -Wall -Wextra -Werror -fsanitize=address
 
 OBJ_DIR = obj/
 SRC_DIR = src/
@@ -8,6 +8,7 @@ SRC_DIR = src/
 SRC		:=	main.c \
 			parsing_utils.c \
 			parsing_utils1.c \
+			parsing_utils2.c \
 			exe.c \
 			exe_utils.c \
 			expand.c \
@@ -27,6 +28,7 @@ SRC		:=	main.c \
 			echo.c \
 			builtins.c \
 			utils.c \
+			error.c \
 
 SRCS = $(addprefix $(SRC_DIR), $(SRC))
 OBJ	= $(SRC:.c=.o)
@@ -59,4 +61,4 @@ fclean: clean
 
 re: fclean all
 
-.PHONY: all clean fclean re libft printf gnl
+.PHONY: all clean fclean re libft

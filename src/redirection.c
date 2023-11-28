@@ -6,7 +6,7 @@
 /*   By: smallem <smallem@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/16 15:34:44 by smallem           #+#    #+#             */
-/*   Updated: 2023/11/25 17:21:53 by smallem          ###   ########.fr       */
+/*   Updated: 2023/11/28 14:26:25 by smallem          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,11 +26,7 @@ int	open_outfiles(int flag, char *name, t_cmd *cmd, t_term *term)
 					cmd->fd_out = open(name, O_WRONLY | O_APPEND, 0644);
 			}
 			else
-			{
-				term->ex_stat = 1;
-				return (ft_putstr_fd(name, 1),
-					ft_putstr_fd(": Permission denied\n", 1), -1);
-			}
+				return (ft_error(name, ": Permission denied", term, 1), -1);
 		}
 		else
 			cmd->fd_out = open(name, O_WRONLY | O_CREAT, 0644);
@@ -47,18 +43,10 @@ int	open_infiles(int flag, char *name, t_cmd *cmd, t_term *term)
 			if (access(name, R_OK) == 0)
 				cmd->fd_in = open(name, O_RDONLY);
 			else
-			{
-				term->ex_stat = 1;
-				return (ft_putstr_fd(name, 1),
-					ft_putstr_fd(": Permission denied\n", 1), -1);
-			}
+				return (ft_error(name, ": Permission denied", term, 1), -1);
 		}
 		else
-		{
-			term->ex_stat = 1;
-			return (ft_putstr_fd(name, 1),
-				ft_putstr_fd(": No such file or directory\n", 1), -1);
-		}
+			return (ft_error(name, ": No such file or directory", term, 1), -1);
 	}
 	else if (flag == 4)
 		open_heredoc(name, cmd, term);

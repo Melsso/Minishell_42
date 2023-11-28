@@ -6,7 +6,7 @@
 /*   By: smallem <smallem@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/23 18:54:27 by smallem           #+#    #+#             */
-/*   Updated: 2023/11/26 15:18:00 by smallem          ###   ########.fr       */
+/*   Updated: 2023/11/28 14:28:47 by smallem          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,9 +53,16 @@ static int	check_syntax(t_term *term)
 	int	i;
 
 	i = skip_spaces(term->input, 0);
-	if (term->input[i] == TK_PIPE || term->input[i] == '&')
-		return (printf("syntax error near unexpected token '%c'\n",
-				term->input[i]), 0);
+	if (term->input[i] == TK_PIPE || term->input[i] == '&'
+		|| term->input[i] == ';' || (term->input[i] == TK_PIPE
+			&& term->input[i + 1] && term->input[i + 1] == TK_PIPE))
+	{
+		term->ex_stat = 258;
+		ft_putstr_fd("syntax error near unexpected token '", 2);
+		ft_putchar_fd(term->input[i], 2);
+		ft_putstr_fd("'\n", 2);
+		return (0);
+	}
 	else if (!ft_strncmp(&term->input[i], "<<", ft_strlen("<<"))
 		|| !ft_strncmp(&term->input[i], ">>", ft_strlen(">>"))
 		|| term->input[i] == TK_GREATER
@@ -63,8 +70,8 @@ static int	check_syntax(t_term *term)
 	{
 		i = skip_spaces(term->input, i + 1);
 		if (!term->input[i])
-			return (printf("syntax error near unexpected token 'newline'\n"),
-				0);
+			return (ft_error("syntax error near unexpected token 'newline'\n",
+					NULL, term, 1), 0);
 	}
 	return (1);
 }
@@ -77,7 +84,9 @@ int	check_input(char *input, t_term *term)
 	if (!check_syntax(term))
 		return (0);
 	read_more(0, term);
-	return (check_syntax(term));
+	if (!check_syntax(term))
+		return (0);
+	return (check_syntax_2(term));
 }
 
 int	skip_quote(char *str, int i, char c)
