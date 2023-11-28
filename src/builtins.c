@@ -6,7 +6,7 @@
 /*   By: smallem <smallem@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/07 18:00:41 by smallem           #+#    #+#             */
-/*   Updated: 2023/11/28 13:02:10 by smallem          ###   ########.fr       */
+/*   Updated: 2023/11/28 14:46:58 by smallem          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,10 @@ void	ft_env(t_term *term, t_cmd *cmd)
 	{
 		mat = ft_split(term->env[i], '=', term);
 		if (mat[1])
-			printf("%s\n", term->env[i]);
+		{
+			ft_putstr_fd(term->env[i], cmd->fd_out);
+			ft_putstr_fd("\n", cmd->fd_out);
+		}
 	}
 	term->ex_stat = 0;
 }
@@ -39,7 +42,8 @@ void	ft_pwd(t_term *term, t_cmd *cmd)
 	{
 		if (!ft_strncmp(term->env[i], "PWD=", ft_strlen("PWD=")))
 		{
-			printf("%s\n", ft_strchr(term->env[i], '/'));
+			ft_putstr_fd(ft_strchr(term->env[i], '/'), cmd->fd_out);
+			ft_putstr_fd("\n", cmd->fd_out);
 			break ;
 		}
 		i++;
@@ -47,7 +51,8 @@ void	ft_pwd(t_term *term, t_cmd *cmd)
 	if (!term->env[i])
 	{
 		getcwd(cwd, sizeof(cwd));
-		printf("%s\n", cwd);
+		ft_putstr_fd(cwd, cmd->fd_out);
+		ft_putstr_fd("\n", cmd->fd_out);
 	}
 	term->ex_stat = 0;
 }
