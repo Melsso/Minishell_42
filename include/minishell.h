@@ -6,7 +6,7 @@
 /*   By: smallem <smallem@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/19 18:05:52 by smallem           #+#    #+#             */
-/*   Updated: 2023/11/28 14:00:25 by smallem          ###   ########.fr       */
+/*   Updated: 2023/11/30 12:55:48 by smallem          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -116,9 +116,7 @@ void	exe_builtins(t_cmd *cmd, t_term *term, int flag);
 char	*get_path(t_term *term, char *cmd);
 int		exec_cmd(t_cmd *cmd, int tmp, t_term *term);
 
-// void	sigquit_handler(int signo, t_term *term);
-// void	sigint_handler(int signo, t_term *term);
-// void	sigstp_handler(int signo, t_term *term);
+void	sighandler(int signo);
 
 void	ft_export(t_term *term, t_cmd *cmd);
 void	ft_unset(t_term *term, t_cmd *cmd);

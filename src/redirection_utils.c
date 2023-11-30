@@ -6,7 +6,7 @@
 /*   By: smallem <smallem@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/22 17:12:58 by smallem           #+#    #+#             */
-/*   Updated: 2023/11/28 13:15:02 by smallem          ###   ########.fr       */
+/*   Updated: 2023/11/28 16:31:38 by smallem          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -104,12 +104,10 @@ int	test(int *i, char **m, t_term *term, t_cmd *cmd)
 	char	*n_t;
 	int		len;
 	int		flag;
-	int		j;
 
 	flag = !(m[0][*i] == TK_GREATER) + 1;
 	n_s = ft_strjoin(ft_substr(m[0], 0, *i, term), " ", term);
 	n_t = ft_strjoin(ft_substr(m[1], 0, *i, term), " ", term);
-	j = *i;
 	if (m[0][++(*i)] == TK_GREATER || m[0][*i] == TK_LESS)
 	{
 		if (m[0][*i] != m[0][*i - 1])

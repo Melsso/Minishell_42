@@ -6,7 +6,7 @@
 /*   By: smallem <smallem@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/19 18:03:00 by smallem           #+#    #+#             */
-/*   Updated: 2023/11/28 12:52:42 by smallem          ###   ########.fr       */
+/*   Updated: 2023/11/30 13:21:29 by smallem          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,15 +41,18 @@ static void	main_loop(t_term *term, char **env)
 
 int	main(int argc, char **argv, char **envp)
 {
-	t_term	term;
+	t_term				term;
 
 	(void)argv;
 	(void)envp;
+	signal(SIGINT, sighandler);
+	signal(SIGTERM, sighandler);
+	signal(SIGQUIT, sighandler);
 	term.ex_stat = 0;
 	term.mem_lst = NULL;
 	term.ast = NULL;
 	if (argc != 1)
 		return (ft_putstr_fd("No arguments allowed\n", 2), 0);
 	main_loop(&term, envp);
-	exit(0);
+	exit(term.ex_stat);
 }

@@ -29,6 +29,7 @@ SRC		:=	main.c \
 			builtins.c \
 			utils.c \
 			error.c \
+			signals.c \
 
 SRCS = $(addprefix $(SRC_DIR), $(SRC))
 OBJ	= $(SRC:.c=.o)

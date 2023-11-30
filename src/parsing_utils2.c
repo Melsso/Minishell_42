@@ -6,7 +6,7 @@
 /*   By: smallem <smallem@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/28 13:59:11 by smallem           #+#    #+#             */
-/*   Updated: 2023/11/28 14:28:22 by smallem          ###   ########.fr       */
+/*   Updated: 2023/11/28 18:36:29 by smallem          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,8 @@
 static int	is_invalid(char c, char n)
 {
 	if (c == ';' || c == '&' || c == '(' || c == ')' || c == ']'
-		|| c == '{' || c == '}' || c == '!' || c == '%' || c == '#')
+		|| c == '{' || c == '}' || c == '!' || c == '%' || c == '#'
+		|| c == '*' || c == '~')
 		return (1);
 	if (n && c == TK_PIPE && n == TK_PIPE)
 		return (1);
@@ -30,6 +31,8 @@ int	check_syntax_2(t_term *term)
 	while (term->input[i])
 	{
 		i = skip_spaces(term->input, i);
+		if (term->input[i])
+			break ;
 		if (term->input[i] == TK_SQUOTE || term->input[i] == TK_DQUOTE)
 			i = skip_quote(term->input, i + 1, term->input[i]) + 1;
 		else if (is_invalid(term->input[i], term->input[i + 1]))

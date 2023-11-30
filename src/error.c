@@ -6,7 +6,7 @@
 /*   By: smallem <smallem@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/28 11:24:38 by smallem           #+#    #+#             */
-/*   Updated: 2023/11/28 13:14:07 by smallem          ###   ########.fr       */
+/*   Updated: 2023/11/28 16:41:28 by smallem          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,6 +74,8 @@ int	check_cmd(t_cmd *cmd, t_term *term)
 		cmd->path = get_path(term, cmd->args[0]);
 	else
 		flag = check_perm(cmd, term, i);
+	if (is_builtin(cmd))
+		return (1);
 	if (!ft_err(flag, cmd, term))
 		return (0);
 	return (1);
