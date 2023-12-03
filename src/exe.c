@@ -6,7 +6,7 @@
 /*   By: smallem <smallem@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/23 12:43:46 by smallem           #+#    #+#             */
-/*   Updated: 2023/11/28 17:20:01 by smallem          ###   ########.fr       */
+/*   Updated: 2023/12/03 14:12:16 by smallem          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,6 +68,8 @@ void	exe_builtins(t_cmd *cmd, t_term *term, int flag)
 
 int	exec_cmd(t_cmd *cmd, int tmp, t_term *term)
 {
+	signal(SIGINT, SIG_DFL);
+	signal(SIGQUIT, SIG_DFL);
 	dup2(tmp, STDIN_FILENO);
 	close(tmp);
 	exe_builtins(cmd, term, 1);

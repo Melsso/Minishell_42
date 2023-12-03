@@ -6,26 +6,27 @@
 /*   By: smallem <smallem@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/19 18:05:52 by smallem           #+#    #+#             */
-/*   Updated: 2023/11/30 12:55:48 by smallem          ###   ########.fr       */
+/*   Updated: 2023/12/03 17:58:22 by smallem          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef MINISHELL_H
 # define MINISHELL_H
 
-#include "../libs/libft/libft.h"
-#include <stdio.h>
-#include <fcntl.h>
-#include <stdlib.h>
-#include <readline/readline.h>
-#include <readline/history.h>
-#include <errno.h>
-#include <signal.h>
-#include <termios.h>
-#include <sys/wait.h>
+# include "../libs/libft/libft.h"
+# include <stdio.h>
+# include <fcntl.h>
+# include <stdlib.h>
+# include <readline/readline.h>
+# include <readline/history.h>
+# include <errno.h>
+# include <signal.h>
+# include <termios.h>
+# include <sys/wait.h>
+# include <stdbool.h>
 
-#define GREEN "\x1b[32m"
-#define RESET "\x1b[0m"
+# define GREEN "\x1b[32m"
+# define RESET "\x1b[0m"
 
 enum e_op
 {
@@ -42,8 +43,8 @@ enum e_op
 	TK_EQ		= '=',
 };
 
-typedef struct	s_fetch	t_fetch;
-typedef struct	s_fetch
+typedef struct s_fetch	t_fetch;
+typedef struct s_fetch
 {
 	char	*name;
 	char	*val;
@@ -51,17 +52,18 @@ typedef struct	s_fetch
 	int		end;
 }	t_fetch;
 
-typedef struct s_cmd t_cmd;
+typedef struct s_cmd	t_cmd;
 typedef struct s_cmd
 {
 	int		fd_in;
 	int		fd_out;
 	int		heredoc;
-	int		*red;
 	char	**args;
 	int		index;
 	char	*path;
 }	t_cmd;
+
+int						g_signo;
 
 char	**copy_env(char **env, t_term *term);
 int		init_s(t_term *term, char *input);
@@ -75,8 +77,7 @@ int		check_cmd(t_cmd *cmd, t_term *term);
 void	ft_error(char *msg, char *ptr, t_term *term, int val);
 void	ft_print_err(char *ptr, int val, t_term *term);
 
-
-int 	check_input(char *input, t_term *term);
+int		check_input(char *input, t_term *term);
 int		check_syntax_2(t_term *term);
 int		count_pipes(t_term *term);
 int		check_quotes(char *str);
@@ -106,17 +107,19 @@ int		test(int *i, char **m, t_term *term, t_cmd *cmd);
 
 int		open_outfiles(int flag, char *name, t_cmd *cmd, t_term *term);
 int		open_infiles(int flag, char *name, t_cmd *cmd, t_term *term);
-void	open_heredoc(char *delim, t_cmd *cmd, t_term *term);
+int		open_heredoc(char *delim, t_cmd *cmd, t_term *term);
 
 int		clean(t_term *term, t_cmd *cmd, char **mat);
 
-int 	execution(t_term *term);
+int		execution(t_term *term);
 int		is_builtin(t_cmd *cmd);
 void	exe_builtins(t_cmd *cmd, t_term *term, int flag);
 char	*get_path(t_term *term, char *cmd);
 int		exec_cmd(t_cmd *cmd, int tmp, t_term *term);
 
 void	sighandler(int signo);
+int		termios_echoback(bool echo_ctl_chr);
+void	hsig_int(int signo);
 
 void	ft_export(t_term *term, t_cmd *cmd);
 void	ft_unset(t_term *term, t_cmd *cmd);

@@ -6,7 +6,7 @@
 /*   By: smallem <smallem@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/16 15:34:44 by smallem           #+#    #+#             */
-/*   Updated: 2023/11/28 14:26:25 by smallem          ###   ########.fr       */
+/*   Updated: 2023/12/03 18:09:14 by smallem          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,15 @@ int	open_infiles(int flag, char *name, t_cmd *cmd, t_term *term)
 			return (ft_error(name, ": No such file or directory", term, 1), -1);
 	}
 	else if (flag == 4)
-		open_heredoc(name, cmd, term);
+	{
+		cmd->heredoc = 1;
+		g_signo = 0;
+		signal(SIGINT, hsig_int);
+		if (open_heredoc(name, cmd, term) != 1)
+			return (-1);
+		else
+			cmd->fd_in = open("heredoc", O_RDONLY, 0644);
+	}
 	return (1);
 }
 

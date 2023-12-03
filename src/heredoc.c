@@ -6,7 +6,7 @@
 /*   By: smallem <smallem@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/25 12:22:54 by smallem           #+#    #+#             */
-/*   Updated: 2023/11/26 14:38:09 by smallem          ###   ########.fr       */
+/*   Updated: 2023/12/03 18:15:40 by smallem          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,8 @@ static int	check_expand(char **delim, t_term *term)
 
 	i = 0;
 	flag = 0;
-	while (delim[0][i])
+	g_signo = 0;
+	while (delim[0] && delim[0][i])
 	{
 		if (delim[0][i] == TK_SQUOTE || *delim[i] == TK_DQUOTE)
 		{
@@ -66,17 +67,35 @@ static char	*expand_line(char *line, t_term *term)
 	return (line);
 }
 
-void	open_heredoc(char *delim, t_cmd *cmd, t_term *term)
+static int	ret(char *str, t_cmd *cmd)
+{
+	if (str)
+		free(str);
+	close(cmd->fd_in);
+	signal(SIGINT, sighandler);
+	if (g_signo)
+	{
+		unlink("heredoc");
+		cmd->heredoc = 0;
+		return (-1);
+	}
+	return (1);
+}
+
+int	open_heredoc(char *delim, t_cmd *cmd, t_term *term)
 {
 	char	*str;
 	int		flag;
 
 	flag = check_expand(&delim, term);
-	cmd->heredoc = 1;
 	cmd->fd_in = open("heredoc", O_WRONLY | O_CREAT | O_TRUNC, 0644);
 	while (1)
 	{
+		if (g_signo)
+			break ;
 		str = readline(">");
+		if (g_signo)
+			break ;
 		if (!ft_strncmp(str, delim, ft_strlen(delim))
 			&& !ft_strncmp(str, delim, ft_strlen(str)))
 			break ;
@@ -89,8 +108,5 @@ void	open_heredoc(char *delim, t_cmd *cmd, t_term *term)
 			str = NULL;
 		}
 	}
-	if (str)
-		free(str);
-	close(cmd->fd_in);
-	cmd->fd_in = open("heredoc", O_RDONLY, 0644);
+	return (ret(str, cmd));
 }

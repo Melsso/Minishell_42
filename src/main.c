@@ -6,7 +6,7 @@
 /*   By: smallem <smallem@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/19 18:03:00 by smallem           #+#    #+#             */
-/*   Updated: 2023/11/30 13:21:29 by smallem          ###   ########.fr       */
+/*   Updated: 2023/12/03 17:43:48 by smallem          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,9 +17,10 @@ static void	main_loop(t_term *term, char **env)
 	char	*input;
 
 	term->env = copy_env(env, term);
-	printf(GREEN);
 	while (1)
 	{
+		printf(GREEN);
+		termios_echoback(false);
 		if (isatty(fileno(stdin)))
 			input = readline("~~> ");
 		if (input && *input)
@@ -46,7 +47,6 @@ int	main(int argc, char **argv, char **envp)
 	(void)argv;
 	(void)envp;
 	signal(SIGINT, sighandler);
-	signal(SIGTERM, sighandler);
 	signal(SIGQUIT, sighandler);
 	term.ex_stat = 0;
 	term.mem_lst = NULL;

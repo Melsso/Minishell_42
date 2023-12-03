@@ -6,7 +6,7 @@
 /*   By: smallem <smallem@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/20 16:53:13 by smallem           #+#    #+#             */
-/*   Updated: 2023/11/28 18:27:56 by smallem          ###   ########.fr       */
+/*   Updated: 2023/12/03 12:15:07 by smallem          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,8 +24,6 @@ enum e_token
 {
 	TK_CMD,
 	TK_PL,
-	TK_RED,
-	TK_ARGS,
 };
 
 typedef struct s_list	t_list;
@@ -55,7 +53,6 @@ typedef struct s_term
 	char	*input;
 	t_tree	*ast;
 	char	**env;
-	pid_t	*pids;
 	t_mem	*mem_lst;
 	int		ex_stat;
 }	t_term;
