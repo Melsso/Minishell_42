@@ -6,7 +6,7 @@
 /*   By: smallem <smallem@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/23 18:54:27 by smallem           #+#    #+#             */
-/*   Updated: 2023/11/28 14:28:47 by smallem          ###   ########.fr       */
+/*   Updated: 2023/12/03 18:25:53 by smallem          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,11 +48,11 @@ static void	read_more(int flag, t_term *term)
 	return ;
 }
 
-static int	check_syntax(t_term *term)
+static int	check_syntax(t_term *term, int i)
 {
-	int	i;
-
 	i = skip_spaces(term->input, 0);
+	if (!term->input[i])
+		return (0);
 	if (term->input[i] == TK_PIPE || term->input[i] == '&'
 		|| term->input[i] == ';' || (term->input[i] == TK_PIPE
 			&& term->input[i + 1] && term->input[i + 1] == TK_PIPE))
@@ -78,13 +78,16 @@ static int	check_syntax(t_term *term)
 
 int	check_input(char *input, t_term *term)
 {
+	int	i;
+
 	term->input = NULL;
 	term->input = ft_strdup(input, term);
 	free(input);
-	if (!check_syntax(term))
+	i = 0;
+	if (!check_syntax(term, i))
 		return (0);
 	read_more(0, term);
-	if (!check_syntax(term))
+	if (!check_syntax(term, i))
 		return (0);
 	return (check_syntax_2(term));
 }

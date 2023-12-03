@@ -6,7 +6,7 @@
 /*   By: smallem <smallem@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/17 15:26:43 by smallem           #+#    #+#             */
-/*   Updated: 2023/12/03 18:15:46 by smallem          ###   ########.fr       */
+/*   Updated: 2023/12/03 18:58:54 by smallem          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ int	termios_echoback(bool echo_ctl_chr)
 void	hsig_int(int signo)
 {
 	if (signo == SIGINT)
-		g_signo = 1;
+		g_signo = 2;
 }
 
 void	sighandler(int signo)
@@ -39,13 +39,6 @@ void	sighandler(int signo)
 	if (signo == SIGINT)
 	{
 		ft_putstr_fd("\n", 2);
-		rl_on_new_line();
-		rl_replace_line("", 0);
-		rl_redisplay();
-	}
-	else if (signo == SIGQUIT)
-	{
-		ft_putstr_fd("", 1);
 		rl_on_new_line();
 		rl_replace_line("", 0);
 		rl_redisplay();

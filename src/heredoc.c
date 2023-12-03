@@ -6,7 +6,7 @@
 /*   By: smallem <smallem@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/25 12:22:54 by smallem           #+#    #+#             */
-/*   Updated: 2023/12/03 18:15:40 by smallem          ###   ########.fr       */
+/*   Updated: 2023/12/03 18:21:42 by smallem          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,7 +73,7 @@ static int	ret(char *str, t_cmd *cmd)
 		free(str);
 	close(cmd->fd_in);
 	signal(SIGINT, sighandler);
-	if (g_signo)
+	if (g_signo == 2)
 	{
 		unlink("heredoc");
 		cmd->heredoc = 0;
@@ -94,7 +94,7 @@ int	open_heredoc(char *delim, t_cmd *cmd, t_term *term)
 		if (g_signo)
 			break ;
 		str = readline(">");
-		if (g_signo)
+		if (g_signo == 2)
 			break ;
 		if (!ft_strncmp(str, delim, ft_strlen(delim))
 			&& !ft_strncmp(str, delim, ft_strlen(str)))
