@@ -6,7 +6,7 @@
 /*   By: smallem <smallem@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/22 11:58:39 by smallem           #+#    #+#             */
-/*   Updated: 2023/11/28 18:26:13 by smallem          ###   ########.fr       */
+/*   Updated: 2023/12/03 19:18:01 by smallem          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,11 +97,13 @@ int	execution(t_term *term)
 {
 	int	tmp;
 
+	signal(SIGINT, sighp);
 	tmp = dup(STDIN_FILENO);
 	if (!term->ast)
 		return (1);
 	exec_tree(term, term->ast, &tmp);
 	close(tmp);
 	iter_tree(term->ast);
+	signal(SIGINT, sighandler);
 	return (0);
 }

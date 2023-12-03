@@ -6,7 +6,7 @@
 /*   By: smallem <smallem@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/19 18:05:52 by smallem           #+#    #+#             */
-/*   Updated: 2023/12/03 18:58:49 by smallem          ###   ########.fr       */
+/*   Updated: 2023/12/03 19:16:51 by smallem          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -120,6 +120,7 @@ int		exec_cmd(t_cmd *cmd, int tmp, t_term *term);
 void	sighandler(int signo);
 int		termios_echoback(bool echo_ctl_chr);
 void	hsig_int(int signo);
+void	sighp(int signo);
 
 void	ft_export(t_term *term, t_cmd *cmd);
 void	ft_unset(t_term *term, t_cmd *cmd);

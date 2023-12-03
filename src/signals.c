@@ -6,7 +6,7 @@
 /*   By: smallem <smallem@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/17 15:26:43 by smallem           #+#    #+#             */
-/*   Updated: 2023/12/03 18:58:54 by smallem          ###   ########.fr       */
+/*   Updated: 2023/12/03 19:16:39 by smallem          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,12 @@ int	termios_echoback(bool echo_ctl_chr)
 	if (status == -1)
 		return (1);
 	return (0);
+}
+
+void	sighp(int signo)
+{
+	if (signo == SIGINT)
+		return ;
 }
 
 void	hsig_int(int signo)
