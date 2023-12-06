@@ -6,7 +6,7 @@
 /*   By: smallem <smallem@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/25 12:22:54 by smallem           #+#    #+#             */
-/*   Updated: 2023/12/04 15:03:05 by smallem          ###   ########.fr       */
+/*   Updated: 2023/12/04 18:02:23 by smallem          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,8 +96,8 @@ int	open_heredoc(char *delim, t_cmd *cmd, t_term *term)
 		str = readline(">");
 		if (g_signo == 2)
 			break ;
-		if (!ft_strncmp(str, delim, ft_strlen(delim))
-			&& !ft_strncmp(str, delim, ft_strlen(str)))
+		if (!str || (!ft_strncmp(str, delim, ft_strlen(delim))
+			&& !ft_strncmp(str, delim, ft_strlen(str))))
 			break ;
 		else
 		{
